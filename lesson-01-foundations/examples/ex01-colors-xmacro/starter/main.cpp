@@ -66,7 +66,8 @@ int main() {
   printf("There are %d colors:\n", NumColors);
   for (int i = 0; i < NumColors; ++i) {
     Color c = static_cast<Color>(i);
-    printf("  %-10s #%06X\n", colorName(c), colorHex(c));
+    printf("  %-10s #%06X\n", colorName(c),
+           colorHex(c));
   }
   // Notice Cyan prints as "<unknown> #000000" -- the lists have drifted.
   return 0;

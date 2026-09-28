@@ -26,5 +26,6 @@ int main(int argc, char **argv) {
   mlir::registerAllDialects(registry);
 
   return mlir::asMainReturnCode(mlir::MlirOptMain(
-      argc, argv, "demo optimizer driver\n", registry));
+      argc, argv, "demo optimizer driver\n",
+      registry));
 }

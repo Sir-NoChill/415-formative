@@ -1,14 +1,17 @@
 # Commit scopes (SCOPES)
 
-The scope names the area of the repository a commit touches. It is **required**
-on every commit. The `commit-msg` hook parses the allowed scopes from the
-backtick-quoted tokens below, so keep the list in this exact shape
-(`- \`scope\` — description`).
+The scope names the area of the repository a commit
+touches. It is **required** on every commit. The
+`commit-msg` hook parses the allowed scopes from the
+backtick-quoted tokens below, so keep the list in this
+exact shape (`- \`scope\` — description`).
 
 ## Cross-cutting
 
-- `repo` — top-level files: root `README.md`, `.gitignore`, repository layout
-- `tooling` — commit/code-lint conventions, git hooks, `.clang-format`, `CONTRIBUTING`
+- `repo` — top-level files: root `README.md`,
+  `.gitignore`, repository layout
+- `tooling` — commit/code-lint conventions, git hooks,
+  `.clang-format`, `CONTRIBUTING`
 
 ## Lesson text
 
@@ -28,5 +31,6 @@ backtick-quoted tokens below, so keep the list in this exact shape
 - `ex07` — Mini AST + semantic pass
 - `ex08` — adapting an AST (add `for`)
 
-If a change spans several examples in one lesson, prefer the `lesson-0N` scope;
-if it spans the whole pack, use `repo`.
+If a change spans several examples in one lesson,
+prefer the `lesson-0N` scope; if it spans the whole
+pack, use `repo`.

@@ -38,13 +38,16 @@ class Eval : public calc::ExprBaseVisitor {
   std::unordered_map<std::string, long> env;
 
 public:
-  std::any visitStat(calc::ExprParser::StatContext *ctx) override {
+  std::any visitStat(
+      calc::ExprParser::StatContext *ctx) override {
     long v = std::any_cast<long>(visit(ctx->expr()));
     env[ctx->ID()->getText()] = v;
-    std::cout << "  " << ctx->ID()->getText() << " = " << v << "\n";
+    std::cout << "  " << ctx->ID()->getText() << " = "
+              << v << "\n";
     return v;
   }
-  std::any visitMulDiv(calc::ExprParser::MulDivContext *ctx) override {
+  std::any visitMulDiv(
+      calc::ExprParser::MulDivContext *ctx) override {
     long l = std::any_cast<long>(visit(ctx->expr(0)));
     long r = std::any_cast<long>(visit(ctx->expr(1)));
     const std::string op = ctx->op->getText();
@@ -55,26 +58,33 @@ public:
     return l %
            r; // handles '%' the moment the grammar produces it (the exercise)
   }
-  std::any visitAddSub(calc::ExprParser::AddSubContext *ctx) override {
+  std::any visitAddSub(
+      calc::ExprParser::AddSubContext *ctx) override {
     long l = std::any_cast<long>(visit(ctx->expr(0)));
     long r = std::any_cast<long>(visit(ctx->expr(1)));
     return ctx->op->getText() == "+" ? l + r : l - r;
   }
-  std::any visitParen(calc::ExprParser::ParenContext *ctx) override {
+  std::any visitParen(
+      calc::ExprParser::ParenContext *ctx) override {
     return visit(ctx->expr());
   }
-  std::any visitVar(calc::ExprParser::VarContext *ctx) override {
+  std::any visitVar(
+      calc::ExprParser::VarContext *ctx) override {
     return env[ctx->ID()->getText()];
   }
-  std::any visitInt(calc::ExprParser::IntContext *ctx) override {
-    return static_cast<long>(std::stol(ctx->INT()->getText()));
+  std::any visitInt(
+      calc::ExprParser::IntContext *ctx) override {
+    return static_cast<long>(
+        std::stol(ctx->INT()->getText()));
   }
 };
 
 int main(int argc, char **argv) {
   // The program to parse: argv[1] if given, else a default that mirrors ex05
   // (plus one '%' use, so the starter vs solution grammar difference shows).
-  std::string src = argc > 1 ? argv[1] : "x = 5; y = 2 * (x + 1); z = 17 % 4;";
+  std::string src =
+      argc > 1 ? argv[1]
+               : "x = 5; y = 2 * (x + 1); z = 17 % 4;";
 
   antlr4::ANTLRInputStream input(src);
   calc::ExprLexer lexer(&input);
@@ -83,11 +93,14 @@ int main(int argc, char **argv) {
   antlr4::tree::ParseTree *tree = parser.prog();
 
   std::cout << "Input:  " << src << "\n\n";
-  std::cout
-      << "Homogeneous parse tree (every node is a generic RuleContext):\n";
-  std::cout << "  " << tree->toStringTree(&parser, true) << "\n\n";
+  std::cout << "Homogeneous parse tree (every node is "
+               "a generic RuleContext):\n";
+  std::cout << "  "
+            << tree->toStringTree(&parser, true)
+            << "\n\n";
 
-  std::cout << "Evaluating via the generated visitor:\n";
+  std::cout
+      << "Evaluating via the generated visitor:\n";
   Eval e;
   e.visit(tree);
   return 0;

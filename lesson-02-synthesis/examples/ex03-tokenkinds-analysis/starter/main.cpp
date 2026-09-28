@@ -25,8 +25,8 @@ enum TokenKind : unsigned {
 // --- Expansion 2: a human-readable name for EVERY token -------------------
 static const char *tokenTypeName(TokenKind K) {
   switch (K) {
-#define TOK(Name)                                                              \
-  case tok_##Name:                                                             \
+#define TOK(Name)                                     \
+  case tok_##Name:                                    \
     return #Name;
 #include "tokens.def"
   default:
@@ -39,8 +39,8 @@ static const char *tokenTypeName(TokenKind K) {
 // six punctuator rows produce case arms.
 static const char *describeToken(TokenKind K) {
   switch (K) {
-#define PUNCTUATOR(Spelling, Name)                                            \
-  case tok_##Name:                                                            \
+#define PUNCTUATOR(Spelling, Name)                    \
+  case tok_##Name:                                    \
     return #Spelling;
 #include "tokens.def"
   default:
@@ -53,8 +53,8 @@ static const char *describeToken(TokenKind K) {
 // defined, so only punctuator rows appear.
 static TokenKind punctuatorFor(char c) {
   switch (c) {
-#define PUNCTUATOR(Spelling, Name)                                            \
-  case Spelling:                                                              \
+#define PUNCTUATOR(Spelling, Name)                    \
+  case Spelling:                                      \
     return tok_##Name;
 #include "tokens.def"
   default:
@@ -69,16 +69,22 @@ int main(int argc, char **argv) {
   printf("Lexing: %s\n", src);
 
   for (const char *p = src; *p;) {
-    if (*p == ' ') { ++p; continue; }
+    if (*p == ' ') {
+      ++p;
+      continue;
+    }
     if (*p >= '0' && *p <= '9') {
       const char *start = p;
-      while (*p >= '0' && *p <= '9') ++p;
-      printf("  %-10s \"%.*s\"\n", tokenTypeName(tok_number),
+      while (*p >= '0' && *p <= '9')
+        ++p;
+      printf("  %-10s \"%.*s\"\n",
+             tokenTypeName(tok_number),
              (int)(p - start), start);
       continue;
     }
     TokenKind k = punctuatorFor(*p);
-    printf("  %-10s %s\n", tokenTypeName(k), describeToken(k));
+    printf("  %-10s %s\n", tokenTypeName(k),
+           describeToken(k));
     ++p;
   }
   return 0;

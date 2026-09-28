@@ -42,8 +42,8 @@ enum class Kind {
 #include "mini_nodes.def"
 };
 
-#define MINI_NODE(NAME)                                                        \
-  case Kind::NAME:                                                             \
+#define MINI_NODE(NAME)                               \
+  case Kind::NAME:                                    \
     return #NAME;
 [[maybe_unused]] static const char *kindName(Kind k) {
   switch (k) {
@@ -59,11 +59,15 @@ struct Node {
 protected:
   explicit Node(Kind k) : kind(k) {}
 };
-template <class To> bool isa(Node *n) { return To::classof(n); }
+template <class To> bool isa(Node *n) {
+  return To::classof(n);
+}
 template <class To> To *dyn_cast(Node *n) {
   return isa<To>(n) ? static_cast<To *>(n) : nullptr;
 }
-template <class To> To *cast(Node *n) { return static_cast<To *>(n); }
+template <class To> To *cast(Node *n) {
+  return static_cast<To *>(n);
+}
 
 struct Expr : Node {
   using Node::Node;
@@ -74,50 +78,73 @@ struct Stmt : Node {
 
 struct IntLit : Expr {
   long value;
-  explicit IntLit(long v) : Expr(Kind::IntLit), value(v) {}
-  static bool classof(Node *n) { return n->kind == Kind::IntLit; }
+  explicit IntLit(long v)
+      : Expr(Kind::IntLit), value(v) {}
+  static bool classof(Node *n) {
+    return n->kind == Kind::IntLit;
+  }
 };
 struct VarRef : Expr {
   std::string name;
-  explicit VarRef(std::string n) : Expr(Kind::VarRef), name(std::move(n)) {}
-  static bool classof(Node *n) { return n->kind == Kind::VarRef; }
+  explicit VarRef(std::string n)
+      : Expr(Kind::VarRef), name(std::move(n)) {}
+  static bool classof(Node *n) {
+    return n->kind == Kind::VarRef;
+  }
 };
 struct Binary : Expr {
   std::string op;
   Expr *lhs, *rhs;
   Binary(std::string o, Expr *a, Expr *b)
-      : Expr(Kind::Binary), op(std::move(o)), lhs(a), rhs(b) {}
-  static bool classof(Node *n) { return n->kind == Kind::Binary; }
+      : Expr(Kind::Binary), op(std::move(o)), lhs(a),
+        rhs(b) {}
+  static bool classof(Node *n) {
+    return n->kind == Kind::Binary;
+  }
 };
 
 struct Let : Stmt {
   std::string name;
   Expr *init;
-  Let(std::string n, Expr *e) : Stmt(Kind::Let), name(std::move(n)), init(e) {}
-  static bool classof(Node *n) { return n->kind == Kind::Let; }
+  Let(std::string n, Expr *e)
+      : Stmt(Kind::Let), name(std::move(n)), init(e) {}
+  static bool classof(Node *n) {
+    return n->kind == Kind::Let;
+  }
 };
 struct Assign : Stmt {
   std::string name;
   Expr *value;
   Assign(std::string n, Expr *e)
-      : Stmt(Kind::Assign), name(std::move(n)), value(e) {}
-  static bool classof(Node *n) { return n->kind == Kind::Assign; }
+      : Stmt(Kind::Assign), name(std::move(n)),
+        value(e) {}
+  static bool classof(Node *n) {
+    return n->kind == Kind::Assign;
+  }
 };
 struct Block : Stmt {
   std::vector<Stmt *> stmts;
   Block() : Stmt(Kind::Block) {}
-  static bool classof(Node *n) { return n->kind == Kind::Block; }
+  static bool classof(Node *n) {
+    return n->kind == Kind::Block;
+  }
 };
 struct While : Stmt {
   Expr *cond;
   Block *body;
-  While(Expr *c, Block *b) : Stmt(Kind::While), cond(c), body(b) {}
-  static bool classof(Node *n) { return n->kind == Kind::While; }
+  While(Expr *c, Block *b)
+      : Stmt(Kind::While), cond(c), body(b) {}
+  static bool classof(Node *n) {
+    return n->kind == Kind::While;
+  }
 };
 struct Print : Stmt {
   Expr *value;
-  explicit Print(Expr *e) : Stmt(Kind::Print), value(e) {}
-  static bool classof(Node *n) { return n->kind == Kind::Print; }
+  explicit Print(Expr *e)
+      : Stmt(Kind::Print), value(e) {}
+  static bool classof(Node *n) {
+    return n->kind == Kind::Print;
+  }
 };
 
 // STRATEGY A: the new first-class node.
@@ -127,14 +154,18 @@ struct For : Stmt {
   Stmt *step;
   Block *body;
   For(Stmt *i, Expr *c, Stmt *s, Block *b)
-      : Stmt(Kind::For), init(i), cond(c), step(s), body(b) {}
-  static bool classof(Node *n) { return n->kind == Kind::For; }
+      : Stmt(Kind::For), init(i), cond(c), step(s),
+        body(b) {}
+  static bool classof(Node *n) {
+    return n->kind == Kind::For;
+  }
 };
 
 struct Arena {
   std::vector<std::unique_ptr<Node>> pool;
   template <class T, class... A> T *make(A &&...args) {
-    auto p = std::make_unique<T>(std::forward<A>(args)...);
+    auto p =
+        std::make_unique<T>(std::forward<A>(args)...);
     T *raw = p.get();
     pool.push_back(std::move(p));
     return raw;
@@ -197,7 +228,8 @@ struct Interp {
         exec(w->body);
       break;
     }
-    case Kind::For: { // STRATEGY A: interpret the For node directly.
+    case Kind::
+        For: { // STRATEGY A: interpret the For node directly.
       auto *f = cast<For>(s);
       for (exec(f->init); eval(f->cond); exec(f->step))
         exec(f->body);
@@ -237,13 +269,17 @@ using namespace mini;
 static For *buildForLoop(Arena &a) {
   auto *body = a.make<Block>();
   body->stmts.push_back(a.make<Assign>(
-      "sum", a.make<Binary>("+", a.make<VarRef>("sum"), a.make<VarRef>("i"))));
+      "sum", a.make<Binary>("+", a.make<VarRef>("sum"),
+                            a.make<VarRef>("i"))));
   return a.make<For>(
-      a.make<Let>("i", a.make<IntLit>(1)),                         // init
-      a.make<Binary>("<", a.make<VarRef>("i"), a.make<IntLit>(6)), // cond
-      a.make<Assign>("i", a.make<Binary>("+", a.make<VarRef>("i"),
-                                         a.make<IntLit>(1))), // step
-      body);                                                  // body
+      a.make<Let>("i", a.make<IntLit>(1)), // init
+      a.make<Binary>("<", a.make<VarRef>("i"),
+                     a.make<IntLit>(6)), // cond
+      a.make<Assign>(
+          "i",
+          a.make<Binary>("+", a.make<VarRef>("i"),
+                         a.make<IntLit>(1))), // step
+      body);                                  // body
 }
 
 int main() {
@@ -253,7 +289,8 @@ int main() {
   {
     Interp ip;
     ip.env["sum"] = 0;
-    std::printf("Strategy A (first-class For node): sum = ");
+    std::printf(
+        "Strategy A (first-class For node): sum = ");
     ip.exec(buildForLoop(a));
     ip.exec(a.make<Print>(a.make<VarRef>("sum")));
   }
@@ -263,11 +300,13 @@ int main() {
     Interp ip;
     ip.env["sum"] = 0;
     Stmt *desugared = desugarFor(a, buildForLoop(a));
-    std::printf("Strategy B (desugared to while): sum = ");
+    std::printf(
+        "Strategy B (desugared to while): sum = ");
     ip.exec(desugared);
     ip.exec(a.make<Print>(a.make<VarRef>("sum")));
   }
 
-  std::printf("\nBoth strategies compute 1+2+3+4+5 = 15.\n");
+  std::printf(
+      "\nBoth strategies compute 1+2+3+4+5 = 15.\n");
   return 0;
 }

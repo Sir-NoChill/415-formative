@@ -37,7 +37,9 @@ struct SourceLoc {
 
 enum class Type { Int, Bool, Error };
 static const char *typeName(Type t) {
-  return t == Type::Int ? "int" : t == Type::Bool ? "bool" : "<error>";
+  return t == Type::Int    ? "int"
+         : t == Type::Bool ? "bool"
+                           : "<error>";
 }
 
 //===----------------------------------------------------------------------===//
@@ -56,17 +58,17 @@ enum class Kind {
 
 // isExprKind() (and, symmetrically, any other category) generated from the
 // range.
-#define MINI_NODE_RANGE(BASE, FIRST, LAST)                                     \
-  static bool is##BASE##Kind(Kind k) {                                         \
-    return k >= Kind::FIRST && k <= Kind::LAST;                                \
+#define MINI_NODE_RANGE(BASE, FIRST, LAST)            \
+  static bool is##BASE##Kind(Kind k) {                \
+    return k >= Kind::FIRST && k <= Kind::LAST;       \
   }
 #include "mini_nodes.def"
 
 // A second consumer of the SAME table: a debug name for each kind, via
 // stringize. (Marked maybe_unused so it needn't be called to demonstrate the
 // point.)
-#define MINI_NODE(NAME)                                                        \
-  case Kind::NAME:                                                             \
+#define MINI_NODE(NAME)                               \
+  case Kind::NAME:                                    \
     return #NAME;
 [[maybe_unused]] static const char *kindName(Kind k) {
   switch (k) {
@@ -85,11 +87,15 @@ protected:
 };
 
 // LLVM-style RTTI (see ParserByHand's AST.h; here inline for one file).
-template <class To> bool isa(Node *n) { return To::classof(n); }
+template <class To> bool isa(Node *n) {
+  return To::classof(n);
+}
 template <class To> To *dyn_cast(Node *n) {
   return isa<To>(n) ? static_cast<To *>(n) : nullptr;
 }
-template <class To> To *cast(Node *n) { return static_cast<To *>(n); }
+template <class To> To *cast(Node *n) {
+  return static_cast<To *>(n);
+}
 
 //===----------------------------------------------------------------------===//
 // (3) Expr and Stmt are distinct categories, so the type system itself forbids
@@ -99,76 +105,108 @@ template <class To> To *cast(Node *n) { return static_cast<To *>(n); }
 struct Expr : Node {
   Type type = Type::Error; // (4) decorated by Sema
   Expr(Kind k, SourceLoc l) : Node(k, l) {}
-  static bool classof(Node *n) { return isExprKind(n->kind); }
+  static bool classof(Node *n) {
+    return isExprKind(n->kind);
+  }
 };
 struct Stmt : Node {
   using Node::Node;
-  static bool classof(Node *n) { return !isExprKind(n->kind); }
+  static bool classof(Node *n) {
+    return !isExprKind(n->kind);
+  }
 };
 
 struct IntLit : Expr {
   long value;
-  IntLit(SourceLoc l, long v) : Expr(Kind::IntLit, l), value(v) {}
-  static bool classof(Node *n) { return n->kind == Kind::IntLit; }
+  IntLit(SourceLoc l, long v)
+      : Expr(Kind::IntLit, l), value(v) {}
+  static bool classof(Node *n) {
+    return n->kind == Kind::IntLit;
+  }
 };
 struct BoolLit : Expr {
   bool value;
-  BoolLit(SourceLoc l, bool v) : Expr(Kind::BoolLit, l), value(v) {}
-  static bool classof(Node *n) { return n->kind == Kind::BoolLit; }
+  BoolLit(SourceLoc l, bool v)
+      : Expr(Kind::BoolLit, l), value(v) {}
+  static bool classof(Node *n) {
+    return n->kind == Kind::BoolLit;
+  }
 };
 struct VarRef : Expr {
   std::string name;
   VarRef(SourceLoc l, std::string n)
       : Expr(Kind::VarRef, l), name(std::move(n)) {}
-  static bool classof(Node *n) { return n->kind == Kind::VarRef; }
+  static bool classof(Node *n) {
+    return n->kind == Kind::VarRef;
+  }
 };
 struct Binary : Expr {
   std::string op; // "+","-","*","/","<","=="
-  Expr *lhs;      // (5) named, typed children -- no kids[0]/kids[1] convention
+  Expr *
+      lhs; // (5) named, typed children -- no kids[0]/kids[1] convention
   Expr *rhs;
   Binary(SourceLoc l, std::string o, Expr *a, Expr *b)
-      : Expr(Kind::Binary, l), op(std::move(o)), lhs(a), rhs(b) {}
-  static bool classof(Node *n) { return n->kind == Kind::Binary; }
+      : Expr(Kind::Binary, l), op(std::move(o)),
+        lhs(a), rhs(b) {}
+  static bool classof(Node *n) {
+    return n->kind == Kind::Binary;
+  }
 };
 
 struct Let : Stmt {
   std::string name;
   Expr *init;
   Let(SourceLoc l, std::string n, Expr *e)
-      : Stmt(Kind::Let, l), name(std::move(n)), init(e) {}
-  static bool classof(Node *n) { return n->kind == Kind::Let; }
+      : Stmt(Kind::Let, l), name(std::move(n)),
+        init(e) {}
+  static bool classof(Node *n) {
+    return n->kind == Kind::Let;
+  }
 };
 struct Assign : Stmt {
   std::string name;
   Expr *value;
   Assign(SourceLoc l, std::string n, Expr *e)
-      : Stmt(Kind::Assign, l), name(std::move(n)), value(e) {}
-  static bool classof(Node *n) { return n->kind == Kind::Assign; }
+      : Stmt(Kind::Assign, l), name(std::move(n)),
+        value(e) {}
+  static bool classof(Node *n) {
+    return n->kind == Kind::Assign;
+  }
 };
 struct Block : Stmt {
   std::vector<Stmt *> stmts;
   explicit Block(SourceLoc l) : Stmt(Kind::Block, l) {}
-  static bool classof(Node *n) { return n->kind == Kind::Block; }
+  static bool classof(Node *n) {
+    return n->kind == Kind::Block;
+  }
 };
 struct If : Stmt {
   Expr *cond;
   Block *thenB;
   Block *elseB; // may be null
   If(SourceLoc l, Expr *c, Block *t, Block *e)
-      : Stmt(Kind::If, l), cond(c), thenB(t), elseB(e) {}
-  static bool classof(Node *n) { return n->kind == Kind::If; }
+      : Stmt(Kind::If, l), cond(c), thenB(t),
+        elseB(e) {}
+  static bool classof(Node *n) {
+    return n->kind == Kind::If;
+  }
 };
 struct While : Stmt {
   Expr *cond;
   Block *body;
   While(SourceLoc l, Expr *c, Block *b)
       : Stmt(Kind::While, l), cond(c), body(b) {}
-  static bool classof(Node *n) { return n->kind == Kind::While; }
+  static bool classof(Node *n) {
+    return n->kind == Kind::While;
+  }
 };
 struct Print : Stmt {
   Expr *value;
-  Print(SourceLoc l, Expr *e) : Stmt(Kind::Print, l), value(e) {}
-  static bool classof(Node *n) { return n->kind == Kind::Print; }
+  Print(SourceLoc l, Expr *e)
+      : Stmt(Kind::Print, l), value(e) {}
+  static bool classof(Node *n) {
+    return n->kind == Kind::Print;
+  }
 };
 
 // Arena: owns every node; the tree holds raw pointers (Clang's ASTContext
@@ -176,7 +214,8 @@ struct Print : Stmt {
 struct Arena {
   std::vector<std::unique_ptr<Node>> pool;
   template <class T, class... A> T *make(A &&...args) {
-    auto p = std::make_unique<T>(std::forward<A>(args)...);
+    auto p =
+        std::make_unique<T>(std::forward<A>(args)...);
     T *raw = p.get();
     pool.push_back(std::move(p));
     return raw;
@@ -188,15 +227,18 @@ struct Arena {
 //===----------------------------------------------------------------------===//
 class Sema {
   // A stack of scopes; each maps a name to its declared type.
-  std::vector<std::unordered_map<std::string, Type>> scopes;
+  std::vector<std::unordered_map<std::string, Type>>
+      scopes;
   int errors = 0;
 
   void error(SourceLoc l, const std::string &msg) {
-    std::printf("  %d:%d: error: %s\n", l.line, l.col, msg.c_str());
+    std::printf("  %d:%d: error: %s\n", l.line, l.col,
+                msg.c_str());
     ++errors;
   }
   Type *lookup(const std::string &n) {
-    for (auto it = scopes.rbegin(); it != scopes.rend(); ++it) {
+    for (auto it = scopes.rbegin();
+         it != scopes.rend(); ++it) {
       auto f = it->find(n);
       if (f != it->end())
         return &f->second;
@@ -224,9 +266,11 @@ private:
       auto *d = cast<Let>(s);
       Type t = checkExpr(d->init);
       if (scopes.back().count(d->name))
-        error(d->loc, "redeclaration of '" + d->name + "'");
+        error(d->loc,
+              "redeclaration of '" + d->name + "'");
       else
-        scopes.back()[d->name] = t; // name enters scope AFTER its initializer
+        scopes.back()[d->name] =
+            t; // name enters scope AFTER its initializer
       break;
     }
     case Kind::Assign: {
@@ -234,10 +278,14 @@ private:
       Type vt = checkExpr(a->value);
       Type *decl = lookup(a->name);
       if (!decl)
-        error(a->loc, "assignment to undeclared '" + a->name + "'");
+        error(a->loc, "assignment to undeclared '" +
+                          a->name + "'");
       else if (*decl != vt && vt != Type::Error)
-        error(a->loc, "cannot assign " + std::string(typeName(vt)) + " to '" +
-                          a->name + "' of type " + typeName(*decl));
+        error(a->loc, "cannot assign " +
+                          std::string(typeName(vt)) +
+                          " to '" + a->name +
+                          "' of type " +
+                          typeName(*decl));
       break;
     }
     case Kind::If: {
@@ -287,12 +335,15 @@ private:
     }
     case Kind::Binary: {
       auto *b = cast<Binary>(e);
-      Type l = checkExpr(b->lhs), r = checkExpr(b->rhs);
+      Type l = checkExpr(b->lhs),
+           r = checkExpr(b->rhs);
       bool compare = (b->op == "<" || b->op == "==");
-      if ((l != Type::Int || r != Type::Int) && l != Type::Error &&
-          r != Type::Error)
-        error(b->loc, "operator '" + b->op + "' requires int operands");
-      return e->type = compare ? Type::Bool : Type::Int;
+      if ((l != Type::Int || r != Type::Int) &&
+          l != Type::Error && r != Type::Error)
+        error(b->loc, "operator '" + b->op +
+                          "' requires int operands");
+      return e->type =
+                 compare ? Type::Bool : Type::Int;
     }
     default:
       return Type::Error;
@@ -316,18 +367,24 @@ using namespace mini;
 static Block *buildGood(Arena &a) {
   auto *prog = a.make<Block>(SourceLoc{1, 1});
   prog->stmts.push_back(
-      a.make<Let>(SourceLoc{1, 1}, "a", a.make<IntLit>(SourceLoc{1, 9}, 3)));
+      a.make<Let>(SourceLoc{1, 1}, "a",
+                  a.make<IntLit>(SourceLoc{1, 9}, 3)));
   prog->stmts.push_back(a.make<Let>(
       SourceLoc{2, 1}, "b",
-      a.make<Binary>(SourceLoc{2, 9}, "+", a.make<VarRef>(SourceLoc{2, 9}, "a"),
-                     a.make<IntLit>(SourceLoc{2, 13}, 4))));
+      a.make<Binary>(
+          SourceLoc{2, 9}, "+",
+          a.make<VarRef>(SourceLoc{2, 9}, "a"),
+          a.make<IntLit>(SourceLoc{2, 13}, 4))));
   auto *then = a.make<Block>(SourceLoc{3, 14});
-  then->stmts.push_back(
-      a.make<Print>(SourceLoc{3, 16}, a.make<VarRef>(SourceLoc{3, 22}, "b")));
+  then->stmts.push_back(a.make<Print>(
+      SourceLoc{3, 16},
+      a.make<VarRef>(SourceLoc{3, 22}, "b")));
   prog->stmts.push_back(a.make<If>(
       SourceLoc{3, 1},
-      a.make<Binary>(SourceLoc{3, 5}, "<", a.make<VarRef>(SourceLoc{3, 5}, "b"),
-                     a.make<IntLit>(SourceLoc{3, 9}, 20)),
+      a.make<Binary>(
+          SourceLoc{3, 5}, "<",
+          a.make<VarRef>(SourceLoc{3, 5}, "b"),
+          a.make<IntLit>(SourceLoc{3, 9}, 20)),
       then, nullptr));
   return prog;
 }
@@ -340,20 +397,27 @@ static Block *buildGood(Arena &a) {
 static Block *buildBad(Arena &a) {
   auto *prog = a.make<Block>(SourceLoc{1, 1});
   prog->stmts.push_back(
-      a.make<Let>(SourceLoc{1, 1}, "a", a.make<IntLit>(SourceLoc{1, 9}, 3)));
+      a.make<Let>(SourceLoc{1, 1}, "a",
+                  a.make<IntLit>(SourceLoc{1, 9}, 3)));
   prog->stmts.push_back(a.make<Assign>(
       SourceLoc{2, 1}, "c",
-      a.make<Binary>(SourceLoc{2, 5}, "+", a.make<VarRef>(SourceLoc{2, 5}, "a"),
-                     a.make<IntLit>(SourceLoc{2, 9}, 1))));
+      a.make<Binary>(
+          SourceLoc{2, 5}, "+",
+          a.make<VarRef>(SourceLoc{2, 5}, "a"),
+          a.make<IntLit>(SourceLoc{2, 9}, 1))));
   prog->stmts.push_back(a.make<Print>(
       SourceLoc{3, 1},
-      a.make<Binary>(SourceLoc{3, 7}, "+", a.make<VarRef>(SourceLoc{3, 7}, "a"),
-                     a.make<VarRef>(SourceLoc{3, 11}, "d"))));
+      a.make<Binary>(
+          SourceLoc{3, 7}, "+",
+          a.make<VarRef>(SourceLoc{3, 7}, "a"),
+          a.make<VarRef>(SourceLoc{3, 11}, "d"))));
   auto *empty = a.make<Block>(SourceLoc{4, 14});
   prog->stmts.push_back(a.make<If>(
       SourceLoc{4, 1},
-      a.make<Binary>(SourceLoc{4, 5}, "+", a.make<VarRef>(SourceLoc{4, 5}, "a"),
-                     a.make<IntLit>(SourceLoc{4, 9}, 1)),
+      a.make<Binary>(
+          SourceLoc{4, 5}, "+",
+          a.make<VarRef>(SourceLoc{4, 5}, "a"),
+          a.make<IntLit>(SourceLoc{4, 9}, 1)),
       empty, nullptr));
   return prog;
 }
@@ -363,9 +427,11 @@ int main() {
 
   std::printf("=== Checking the good program ===\n");
   int e1 = Sema{}.run(*buildGood(a));
-  std::printf(e1 == 0 ? "  OK: no semantic errors.\n" : "");
+  std::printf(e1 == 0 ? "  OK: no semantic errors.\n"
+                      : "");
 
-  std::printf("\n=== Checking the buggy program ===\n");
+  std::printf(
+      "\n=== Checking the buggy program ===\n");
   int e2 = Sema{}.run(*buildBad(a));
   std::printf("  %d semantic error(s).\n", e2);
 
