@@ -182,6 +182,16 @@ handouts; `gazc` is the course compiler).
   lexer tables, TableGen (and a custom `gazprea-tblgen`) for its MLIR dialect
   (`include/Gazprea/GazpreaOps.td`) and its **AST** (`include/AST/ASTNodes.td`).
 
+### Canonical online references (for the claims in the lessons)
+
+- LLVM-style RTTI (`isa`/`cast`/`dyn_cast`/`classof`) — <https://llvm.org/docs/HowToSetUpLLVMStyleRTTI.html>
+- Clang AST, `ASTContext`, `RecursiveASTVisitor` — <https://clang.llvm.org/docs/IntroductionToTheClangAST.html>, <https://clang.llvm.org/docs/RAVFrontendAction.html>
+- MLIR — Language Reference & Operation Definition Spec — <https://mlir.llvm.org/docs/LangRef/>, <https://mlir.llvm.org/docs/DefiningDialects/Operations/>
+- ANTLR & Terence Parr, *Language Implementation Patterns* (the AST typing taxonomy) — <https://www.antlr.org/>, <https://pragprog.com/titles/tpdsl/language-implementation-patterns/>
+- The expression problem (Wadler, 1998) — <https://homepages.inf.ed.ac.uk/wadler/papers/expression/expression.txt>
+- Small teaching languages (context for Lesson 4's *Mini*) — LLVM Kaleidoscope <https://llvm.org/docs/tutorial/>, *Crafting Interpreters* (Lox) <https://craftinginterpreters.com/>
+- X-macros — <https://en.wikipedia.org/wiki/X_macro> · Aho/Lam/Sethi/Ullman, *Compilers* (Dragon Book) — <https://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools>
+
 ## A note on verification
 
 Every code example in this pack was compiled and run on this machine before being
