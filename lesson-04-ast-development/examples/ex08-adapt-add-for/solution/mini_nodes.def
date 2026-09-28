@@ -1,0 +1,33 @@
+//===- mini_nodes.def - The Mini AST node-kind table (an X-macro) ----------===//
+//
+// The Lesson 1 idiom, carried into ex08. This one list is the single source of
+// truth for the `Kind` enum and the `kindName()` debug string (main.cpp #includes
+// it twice). It is also where ex08's "adapt the AST" story begins: adding the
+// `for` loop as a first-class node (strategy A) started here, as the ONE row
+// marked below. That single edit grows the enum -- and, in a fuller AST like
+// ParserByHand's ASTNodes.def or gazc's ASTNodes.td, would also grow the visitor
+// and the RTTI predicates -- automatically.
+//
+//   MINI_NODE(NAME) - one concrete node kind.
+//
+//===----------------------------------------------------------------------===//
+
+#ifndef MINI_NODE
+#define MINI_NODE(NAME)
+#endif
+
+// Statements.
+MINI_NODE(Let)
+MINI_NODE(Assign)
+MINI_NODE(If)
+MINI_NODE(While)
+MINI_NODE(For)      // <-- strategy A added exactly this one row
+MINI_NODE(Print)
+MINI_NODE(Block)
+
+// Expressions.
+MINI_NODE(IntLit)
+MINI_NODE(VarRef)
+MINI_NODE(Binary)
+
+#undef MINI_NODE
