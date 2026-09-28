@@ -1,4 +1,4 @@
-# Lesson 2 — Synthesis: comparing, analyzing, and adapting
+# Lesson 2 -- Synthesis: comparing, analyzing, and adapting
 
 > **Prerequisite:** Lesson 1
 > (`../lesson-01-foundations/`). This lesson assumes
@@ -50,7 +50,7 @@ never drift apart.* Everything else differs.
   1 hygiene win).
 - Both separate *the data* (the list) from *its uses*
   (the generated shapes).
-- Both are resolved at build time — there's no runtime
+- Both are resolved at build time -- there's no runtime
   cost.
 
 ### Where they differ
@@ -59,7 +59,7 @@ never drift apart.* Everything else differs.
 |---|---|---|
 | **Engine** | the C preprocessor (text substitution) | a backend program compiled into `llvm-tblgen`/`mlir-tblgen` |
 | **The data model** | untyped rows of tokens | typed records with named fields |
-| **Computation** | none — only pastes text | `!add`, `!shl`, conditionals, etc. |
+| **Computation** | none -- only pastes text | `!add`, `!shl`, conditionals, etc. |
 | **Inheritance / reuse** | none | `class` inheritance, mixins, defaults |
 | **Validation** | none | type checks, constraints, predicates |
 | **Introspection** | invisible after preprocessing | dumpable (`--print-records`, `--dump-json`) |
@@ -75,7 +75,7 @@ never drift apart.* Everything else differs.
   token table or an error-code enum.
 - Use **TableGen** when the data is **rich or
   structured**, **several tools** need it, or you need
-  **computation/validation/inheritance** — and the
+  **computation/validation/inheritance** -- and the
   project is big enough to justify the toolchain.
 
 The Gazprea compiler in this repo makes *both* choices
@@ -110,19 +110,19 @@ Watch for these when you read one:
   a consumer that defines the specific macro handles
   them specially. Trace both paths.
 - **Token-pasting `##`** builds identifiers (`tok_ ##
-  Name` → `tok_plus`).
+  Name` -> `tok_plus`).
 - **Stringize `#`** turns a token into a string
-  (`#Name` → `"plus"`).
-- **The same list, several `#include`s** — find *all*
+  (`#Name` -> `"plus"`).
+- **The same list, several `#include`s** -- find *all*
   the include sites to know the full effect of one row.
 
-> **➡ Do ex03 now.**
+> **-> Do ex03 now.**
 > `examples/ex03-tokenkinds-analysis/` is a lexer token
 > table (mirroring the real *ParserByHand* lab and
 > Clang's `TokenKinds.def`). You'll trace the *same*
-> six-row list through four different expansions — an
+> six-row list through four different expansions -- an
 > enum, two name switches, and the lexer's character
-> switch — and confirm your analysis by running the
+> switch -- and confirm your analysis by running the
 > program.
 
 ---
@@ -135,9 +135,9 @@ backend* rather than text substitution:
 
 > **To analyze a TableGen construct, ask three
 > questions:** (a) *What record does this `def`/`class`
-> produce* — what are its fields and their values,
+> produce* -- what are its fields and their values,
 > including inherited and computed ones? (b) *Which
-> backend consumes it* — which `-gen-*` generator,
+> backend consumes it* -- which `-gen-*` generator,
 > producing what kind of output? (c) *What C++ (or
 > docs, or table) does that backend emit for this
 > record?*
@@ -146,23 +146,23 @@ For MLIR operation definitions specifically, learn to
 read these parts of a `def`:
 
 - **Traits** in `[...]` (e.g. `Pure`,
-  `SameOperandsAndResultType`) — they attach behaviour
+  `SameOperandsAndResultType`) -- they attach behaviour
   and, crucially, affect what the parser/printer need
   to spell out.
 - **`arguments = (ins ...)` / `results = (outs ...)`**
-  — the typed operands and results, in TableGen's
+  -- the typed operands and results, in TableGen's
   parenthesised *dag* notation.
-- **`assemblyFormat`** — a declarative grammar from
+- **`assemblyFormat`** -- a declarative grammar from
   which the backend generates *both* a textual parser
   and a printer.
 
 The leap from Lesson 1: in ex02 the "backend" was a
 10-line Python script printing colour lines. In real
 MLIR the backend is `mlir-tblgen`, and it emits
-**entire C++ classes** — builders, accessors,
-verifiers, parsers, printers — one per `def`.
+**entire C++ classes** -- builders, accessors,
+verifiers, parsers, printers -- one per `def`.
 
-> **➡ Do ex04 now (part 1: analyze).**
+> **-> Do ex04 now (part 1: analyze).**
 > `examples/ex04-mini-dialect-tablegen/` is a small but
 > real MLIR *dialect*. Read `Demo_AddOp` in
 > `include/Demo/DemoOps.td` and predict what C++ it
@@ -187,17 +187,17 @@ PUNCTUATOR('=', equal)
 PUNCTUATOR('%', percent)
 ```
 
-…and **four** derived constructs update themselves —
+...and **four** derived constructs update themselves --
 the `TokenKind` enum, two name switches, and the
-lexer's character switch — while you never open a
+lexer's character switch -- while you never open a
 single switch statement. When you can do that
 confidently on the ex03 table, you can do it on Clang's
 `TokenKinds.def` or Gazprea's `Operators.def`; they're
 the same shape at larger scale.
 
-> **➡ ex03 exercise:** add the two punctuators, rebuild
-> *without touching `main.cpp`*, and watch `5%2=1`
-> start lexing correctly. Full answer in ex03's
+> **-> ex03 exercise:** add the two punctuators,
+> rebuild *without touching `main.cpp`*, and watch
+> `5%2=1` start lexing correctly. Full answer in ex03's
 > `WALKTHROUGH.md`.
 
 ---
@@ -205,7 +205,7 @@ the same shape at larger scale.
 ## 5. Adapting a set of TableGen tools (objective 5)
 
 This is the headline skill of the lesson: take a
-project already wired for TableGen and extend it — add
+project already wired for TableGen and extend it -- add
 a record, let the generator regenerate the C++, and get
 new working functionality with **no hand-written
 boilerplate.**
@@ -224,11 +224,11 @@ def Demo_MulOp : Demo_Op<"mul", [Pure, SameOperandsAndResultType]> {
 Rebuild, and `demo-opt test/mul.mlir` round-trips. What
 you did *not* write is the point: no parser, no
 printer, no verifier, no builder, and not even the
-registration line — `mlir-tblgen` generated the classes
-and the `GET_OP_LIST` that registers them. (And note:
-that registration uses the exact `#define X` /
+registration line -- `mlir-tblgen` generated the
+classes and the `GET_OP_LIST` that registers them. (And
+note: that registration uses the exact `#define X` /
 `#include "...inc"` X-macro idiom from Lesson 1 to
-consume TableGen's *own* output — the two techniques
+consume TableGen's *own* output -- the two techniques
 compose.)
 
 This is exactly how the `gaz` dialect in the Gazprea
@@ -242,7 +242,7 @@ sequel to this lesson: once you see TableGen as "a data
 model plus a code generator," you can write your own
 backend, not just consume LLVM's.
 
-> **➡ ex04 exercise:** add `Demo_MulOp`, rebuild via
+> **-> ex04 exercise:** add `Demo_MulOp`, rebuild via
 > `./run.sh`, confirm `test/mul.mlir` round-trips. Full
 > answer in `solution/DemoOps.td` and ex04's
 > `WALKTHROUGH.md`.
@@ -271,8 +271,8 @@ You've met the objectives if you can:
   `gazc/include/AST/ASTNodes.td`, then find their
   generated `.inc` files in the build tree.
 - Study a custom backend: `gazc/tools/gazprea-tblgen/`
-  — the emitters that turn `ASTNodes.td` into a visitor
-  and a traversal.
+  -- the emitters that turn `ASTNodes.td` into a
+  visitor and a traversal.
 - Browse LLVM's shipped backends in
   `LLVM/llvm-project/mlir/tools/mlir-tblgen/` and
   `LLVM/llvm-project/llvm/utils/TableGen/`.

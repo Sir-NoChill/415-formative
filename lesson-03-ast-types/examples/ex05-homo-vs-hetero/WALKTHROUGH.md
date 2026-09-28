@@ -1,4 +1,4 @@
-# ex05 — Walkthrough: the same tree, two typings
+# ex05 -- Walkthrough: the same tree, two typings
 
 This narrates `solution/main.cpp`. It builds `x = 5; z
 = 3 * (4 + 5); y = 2 * (x + 1)` twice and runs three
@@ -25,7 +25,7 @@ An `Assign(z)` node holds `name = "z"` and `kids = [
 Mul ]`; the `Mul` holds `kids = [ Int(3), Add ]`; the
 `Add` holds `kids = [ Int(4), Int(5) ]`. Which payload
 field is live, and how long `kids` should be, is a
-**convention keyed on `kind`** — the type permits any
+**convention keyed on `kind`** -- the type permits any
 combination.
 
 **Heterogeneous** (`namespace hetero`): each construct
@@ -41,7 +41,7 @@ struct VarRef : Expr { std::string name; ... };
 The same `z` is `Assign{name:"z", value: Binary{'*',
 IntLit{3}, Binary{'+', IntLit{4}, IntLit{5}}}}`. Every
 child has a name and a static type; there is no
-`kids[]` and no "which field is live" question — a
+`kids[]` and no "which field is live" question -- a
 `Binary` simply *has* an `op`, an `lhs`, and an `rhs`.
 
 Kind discrimination in `hetero` is the LLVM idiom,
@@ -69,8 +69,8 @@ differ only in how they ask "what node is this?" and
 - **`fold`** (rewrite). Bottom-up: fold the children,
   and if both came back constant, replace the node with
   a fresh constant. Detailed below.
-- **`eval`** (evaluate). Same two shapes again — a tag
-  `switch` in `homo`, a `dyn_cast` chain in `hetero` —
+- **`eval`** (evaluate). Same two shapes again -- a tag
+  `switch` in `homo`, a `dyn_cast` chain in `hetero` --
   reading each `K_Var`/`VarRef` out of the `env` map.
 
 `run()` glues them per statement: fold the value,
@@ -105,7 +105,7 @@ Two details worth reading closely. First, `z` prints
 binop under it are constants, so `fold` collapses the
 whole subtree to one `IntLit`/`K_Int`. Second, `y`
 prints **unfolded** (`(= y (* 2 (+ x 1)))`) because `x`
-is a variable — `fold` cannot reduce a subtree that
+is a variable -- `fold` cannot reduce a subtree that
 contains a `VarRef`/`K_Var`, so it leaves it intact and
 `eval` finishes the job at `12`. Folding changes the
 *tree*, not the *answer*: in the starter, with `fold` a
@@ -149,7 +149,7 @@ Node *fold(Arena &a, Node *n) {
 Note what the type does *not* protect you from:
 `n->kids[0]` and `n->kids[1]` are just vector indexing.
 Swap them, or write `kids[2]`, and the code still
-compiles — the mistake surfaces only at runtime (a
+compiles -- the mistake surfaces only at runtime (a
 wrong answer, or an out-of-bounds access).
 
 **Heterogeneous.** You `dyn_cast` to the type you need
@@ -182,7 +182,7 @@ Expr *fold(Arena &a, Expr *e) {
 
 Here `b->lhs` and `b->rhs` are named fields of
 `Binary`. Mistype one and the program *does not build*
-— the error moves from runtime to compile time. And
+-- the error moves from runtime to compile time. And
 `dyn_cast<Binary>` guarantees `b->op` is only ever read
 on a node that actually has one. That is the
 heterogeneous payoff, and the cost is the ceremony you
@@ -203,16 +203,16 @@ pole is free on both axes.
 
 The `hetero` half is a scale model of a production AST:
 
-- **ParserByHand** —
+- **ParserByHand** --
   `415-labs/ParserByHand/demo-finished/include/Config/AST.h`
   defines the real heterogeneous `Config` AST with
   exactly this hand-rolled `isa`/`cast`/`dyn_cast` RTTI
   (each node's `classof` over a `Kind` enum, ordered so
   category checks are O(1) range checks). Its enum,
   range predicates, and visitor are all generated from
-  the `ASTNodes.def` X-macro — the Lesson 1–2 idea
+  the `ASTNodes.def` X-macro -- the Lesson 1-2 idea
   applied to an AST.
-- **Gazprea** — `gazc/include/AST/ASTNodes.td` is the
+- **Gazprea** -- `gazc/include/AST/ASTNodes.td` is the
   same thing in TableGen: one record set generates the
   node enum, RTTI, and visitor via the `gazprea-tblgen`
   backend. Read it after this example and the
@@ -223,5 +223,5 @@ parse tree, where an addition, an `if`, and a call are
 all one node type told apart by a runtime tag. **ex06**
 parses the same `2 * (x + 1)` with a real ANTLR
 grammar, prints its homogeneous parse tree, and
-evaluates it through a generated visitor — the same two
-poles you just read, now on real frontends.
+evaluates it through a generated visitor -- the same
+two poles you just read, now on real frontends.

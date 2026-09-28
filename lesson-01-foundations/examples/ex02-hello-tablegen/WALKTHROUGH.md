@@ -1,4 +1,4 @@
-# ex02 — Hello, TableGen (walkthrough & documented solution)
+# ex02 -- Hello, TableGen (walkthrough & documented solution)
 
 ## 1. What this example teaches
 
@@ -10,7 +10,7 @@ In ex01 you kept a list of colors as *rows in an
 X-macro table* (`colors.def`), and the C preprocessor
 stamped those rows into an enum, a name array, and a
 hex array. Here we keep **the exact same list of
-colors** — but written as **TableGen records** in
+colors** -- but written as **TableGen records** in
 `colors.td` instead of preprocessor rows. Same data,
 completely different (and more powerful) machinery
 underneath.
@@ -24,7 +24,7 @@ compute over, and turn into anything.*
 
 TableGen is a language that ships **inside LLVM**. Its
 interpreter/driver is a command-line tool called
-`llvm-tblgen`. You don't install anything extra — if
+`llvm-tblgen`. You don't install anything extra -- if
 you have an LLVM build, you have `llvm-tblgen`.
 
 This example finds it via the `LLVM_DIR` environment
@@ -44,7 +44,7 @@ the work:
   Color<string name, int r, int g, int b>` says "a
   Color has a name and three colour channels," and
   inside the braces it declares fields like `int R =
-  r;`. Think of it like a `struct` definition — it
+  r;`. Think of it like a `struct` definition -- it
   describes shape, it is not itself a value.
 
 - **`def`** is a *concrete record* (an instance) built
@@ -72,7 +72,7 @@ specialised schema (`PrimaryColor`), and five records
 `starter/colors.td` is the solution with two things
 removed. Your job:
 
-**TASK 1 — add a computed field.** Inside `class
+**TASK 1 -- add a computed field.** Inside `class
 Color`, add:
 
 ```tablegen
@@ -83,13 +83,13 @@ int Packed = !add(!shl(r, 16), !add(!shl(g, 8), b));
 operators**. `!shl(r, 16)` shifts red into the top
 byte, and the `!add`s combine the three channels into
 one packed integer `0xRRGGBB`. Here is the key point:
-**the C preprocessor cannot do arithmetic at all** — it
-only pastes text, so an X-macro could never compute
+**the C preprocessor cannot do arithmetic at all** --
+it only pastes text, so an X-macro could never compute
 this for you. TableGen *evaluating* an expression like
 this is one concrete reason it is called an "advanced
 X-macro."
 
-**TASK 2 — add the missing colour.** After `def White
+**TASK 2 -- add the missing colour.** After `def White
 ...`, add:
 
 ```tablegen
@@ -108,7 +108,7 @@ switch statement.
 
 `run.sh` shows three views of the same `.td` file:
 
-**(a) `llvm-tblgen --print-records`** — the parsed
+**(a) `llvm-tblgen --print-records`** -- the parsed
 records in human-readable form. Once you've done TASK 1
 and 2, `Cyan` appears with its computed field:
 
@@ -123,16 +123,16 @@ def Cyan {	// Color
 }
 ```
 
-Notice `Packed = 65535` — **TableGen did the math for
+Notice `Packed = 65535` -- **TableGen did the math for
 you** at generation time.
 
-**(b) `llvm-tblgen --dump-json`** — the *same* records
+**(b) `llvm-tblgen --dump-json`** -- the *same* records
 as a machine-readable JSON data model. This is the
 thing an X-macro can never give you: the data exists as
 inspectable structured output, not just as tokens
 buried inside the preprocessor.
 
-**(c) `show.py`** — a ~10-line "backend" (in plain
+**(c) `show.py`** -- a ~10-line "backend" (in plain
 Python) that reads that JSON and prints one tidy line
 per colour. With the finished file you get exactly:
 
@@ -154,12 +154,12 @@ every line instead reads:
 because `Packed` doesn't exist yet. Great feedback
 loop: the tool tells you exactly what's missing.
 
-## 6. TableGen vs X-macro — the "advanced" part
+## 6. TableGen vs X-macro -- the "advanced" part
 
 Put ex01 and ex02 side by side. Both describe one list
 in one place. Here is what TableGen adds:
 
-1. **The data is real, queryable output — not just
+1. **The data is real, queryable output -- not just
    preprocessor state.** An X-macro's rows only ever
    exist *inside the C preprocessor, at compile time,
    in one translation unit*; nothing else can look at
@@ -171,14 +171,14 @@ in one place. Here is what TableGen adds:
 2. **TableGen can compute, inherit, and constrain.**
    `!add`/`!shl` compute a field; `PrimaryColor :
    Color` reuses a schema; TableGen can also validate
-   values. The preprocessor can do *none* of this — it
+   values. The preprocessor can do *none* of this -- it
    only pastes text.
 
 3. **In real LLVM/MLIR the "backend" is C++, not
    Python.** Our `show.py` is a toy backend. In
    production, the generator is a C++ program compiled
    *into* `llvm-tblgen` / `mlir-tblgen`, and it emits
-   `.inc` files full of C++ — enums, classes, tables.
+   `.inc` files full of C++ -- enums, classes, tables.
    You'll see exactly this in **ex04**, where
    `mlir-tblgen` turns an operations `.td` file into
    fully-formed C++ classes for a compiler dialect.
@@ -194,8 +194,8 @@ Prefer **TableGen** when:
   values.
 
 Prefer a plain **X-macro** when the data is a simple
-flat list and only your own C/C++ code consumes it — it
-needs no extra toolchain and is trivially readable.
+flat list and only your own C/C++ code consumes it --
+it needs no extra toolchain and is trivially readable.
 
 Be honest about the cost: TableGen is *a whole extra
 language and a build-time tool* to learn and depend on.

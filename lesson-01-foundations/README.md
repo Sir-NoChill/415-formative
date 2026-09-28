@@ -1,10 +1,10 @@
-# Lesson 1 — Foundations: X-Macros and TableGen
+# Lesson 1 -- Foundations: X-Macros and TableGen
 
 > **Who this is for.** Fourth-year CS students who have
 > seen C++ but don't feel fluent in it. Every bit of
 > jargon is defined the first time it appears. You do
 > not need to be comfortable with templates or the
-> preprocessor going in — that's what this lesson
+> preprocessor going in -- that's what this lesson
 > builds.
 
 ## Learning objectives
@@ -38,8 +38,8 @@ starter first; peek at the solution when stuck.
 ## 1. What is an X-macro? (objective 1)
 
 Start with the problem it solves. Suppose your program
-has a list of things — colours, tokens, CPU registers,
-error codes — and several parts of the code each need
+has a list of things -- colours, tokens, CPU registers,
+error codes -- and several parts of the code each need
 that list in a *different shape*: an `enum` for one, an
 array of names for another, a `switch` for a third. The
 naive approach writes the list out once per shape:
@@ -71,18 +71,18 @@ An **X-macro** removes the duplication. The definition:
 > produces several different shapes from the one list.
 
 The name comes from the macro being *classically named
-`X`* — the `.def` file is just a list of `X(...)` rows,
-and the "X" is a blank the includer fills in
+`X`* -- the `.def` file is just a list of `X(...)`
+rows, and the "X" is a blank the includer fills in
 ([Wikipedia, *X macro*][xmacro-wiki]). The trick is
 genuinely old: X-macros **predate C itself**, with
 documented use dating back to the **1960s**
 ([Wikipedia][xmacro-wiki]; [Hackaday, *The X Macro: A
 Historic Preprocessor Hack*][xmacro-hackaday]). They
-remain useful — and still relatively unknown — in
+remain useful -- and still relatively unknown -- in
 modern C and C++.
 
 Concretely, the list lives in a file like this (no
-include guard — we *want* it included many times):
+include guard -- we *want* it included many times):
 
 ```cpp
 // colors.def
@@ -104,7 +104,7 @@ enum Color {
 };
 ```
 
-> **➡ Do ex01 now.** `examples/ex01-colors-xmacro/`
+> **-> Do ex01 now.** `examples/ex01-colors-xmacro/`
 > walks through this exact pattern, shows the
 > parallel-list bug in the starter, and has you fix it.
 > Come back here afterward.
@@ -133,7 +133,7 @@ and hands plain, fully-expanded source to the compiler
 proper. You can stop right after that phase with the
 `-E` flag and read exactly what it produced.
 
-Here is the input — three consumers of the one
+Here is the input -- three consumers of the one
 `colors.def` list. It's a real, runnable file,
 [`ex01/solution/preprocess-demo.cpp`](examples/ex01-colors-xmacro/solution/preprocess-demo.cpp):
 
@@ -162,7 +162,7 @@ $ cd examples/ex01-colors-xmacro/solution
 $ g++ -E -P preprocess-demo.cpp
 ```
 
-and this is the **actual, verbatim** output — the code
+and this is the **actual, verbatim** output -- the code
 the compiler really sees (blank lines squeezed for
 space):
 
@@ -193,7 +193,7 @@ static const unsigned ColorHex[] = {
 
 Read the "before" and "after" side by side: the *same
 five rows* of `colors.def` became enumerators, then
-quoted strings (that's what `#Name` does — it
+quoted strings (that's what `#Name` does -- it
 **stringises** the token into `"Red"`), then hex
 literals. Nothing else generated those three lists, so
 they *cannot* disagree. Seeing the "after" is the
@@ -206,7 +206,7 @@ its body into every row.**
 X-macros come from C and you'll meet them in both
 languages, so it helps to know where the two differ.
 The short version: **the preprocessor is nearly
-identical in C and C++** — C++ inherited C's
+identical in C and C++** -- C++ inherited C's
 preprocessor, and `#define`, `#include`, `#`
 (stringise) and `##` (token-paste) behave the same way
 in both ([cppreference][cpp-replace]). The
@@ -219,9 +219,9 @@ idiosyncrasies are small but real:
   ([cppreference: C++][cpp-altops]; [C][c-altops]).
   Fallout for X-macros: don't use one of those words as
   an item name or field in a `.def` you compile as C++
-  — the compiler sees a keyword, not an identifier.
-- **Macros ignore scope — always, but it stings more in
-  C++.** The preprocessor runs before namespaces,
+  -- the compiler sees a keyword, not an identifier.
+- **Macros ignore scope -- always, but it stings more
+  in C++.** The preprocessor runs before namespaces,
   classes, and templates exist, so a macro name
   collides with *everything*, regardless of any
   `namespace`. That's why macro names are
@@ -233,8 +233,8 @@ idiosyncrasies are small but real:
 - **Variadic macros exist in both, but arrived at
   different times.** `__VA_ARGS__` was standardised in
   C99 and C++11; the newer `__VA_OPT__` in C++20 and
-  C23 ([cppreference][cpp-replace]). Fine to use — just
-  mind your target standard.
+  C23 ([cppreference][cpp-replace]). Fine to use --
+  just mind your target standard.
 
 For the plain X-macros in this lesson none of this
 changes the mechanics: the very same `colors.def`
@@ -246,7 +246,7 @@ C++.
 ## 2. Code hygiene: why bother? (objective 3)
 
 "Code hygiene" means habits that keep a codebase
-healthy over time — easy to change safely, hard to
+healthy over time -- easy to change safely, hard to
 break by accident. X-macros improve hygiene in a
 specific, nameable way:
 
@@ -257,8 +257,8 @@ specific, nameable way:
   `<unknown> #000000`) and then watch it become
   structurally impossible.
 - **Changes are local and atomic.** Adding an item is
-  one new row. You cannot "half-add" it — you can't add
-  it to the enum but forget the name table, because
+  one new row. You cannot "half-add" it -- you can't
+  add it to the enum but forget the name table, because
   there is no separate name table to forget.
 - **Derived facts stay correct.** A count like
   `NumColors`, placed right after the generated
@@ -280,7 +280,7 @@ The C preprocessor is a blunt instrument. It only
 pastes text. It cannot do arithmetic, it cannot check
 that your data is well-formed, it cannot let one item
 inherit fields from another, and its data evaporates
-after compilation — nothing outside the compiler can
+after compilation -- nothing outside the compiler can
 inspect it. Real compilers have lists that badly need
 all of those things: LLVM's list of machine
 instructions, for example, carries dozens of structured
@@ -299,8 +299,8 @@ which its front end parses before handing the result
 ([LLVM, *TableGen Overview*][tablegen-doc]).
 
 > Think of TableGen as **an X-macro system with a real
-> language behind it.** Same core idea — *write the
-> list once, generate many things from it* — but now
+> language behind it.** Same core idea -- *write the
+> list once, generate many things from it* -- but now
 > the "list" is a set of typed **records** with fields,
 > inheritance, and computed values, and the "stamping"
 > is done by a real program (a *backend*) instead of by
@@ -308,7 +308,7 @@ which its front end parses before handing the result
 
 The vocabulary is small:
 
-- A **`class`** is a schema — it names the fields a
+- A **`class`** is a schema -- it names the fields a
   record has. (Like a `struct` definition: it describes
   shape, it isn't itself a value.)
 - A **`def`** is a concrete record built from a class.
@@ -317,7 +317,7 @@ The vocabulary is small:
   **compute** field values with operators like `!add`
   and `!shl`.
 - A **backend** is a generator that walks the records
-  and emits output — C++ headers, documentation, JSON,
+  and emits output -- C++ headers, documentation, JSON,
   whatever.
 
 The same colours from ex01, as TableGen:
@@ -330,7 +330,7 @@ class Color<string name, int r, int g, int b> {
 def Red : Color<"Red", 255, 0, 0>;
 ```
 
-> **➡ Do ex02 now.** `examples/ex02-hello-tablegen/`
+> **-> Do ex02 now.** `examples/ex02-hello-tablegen/`
 > runs the real `llvm-tblgen` on this file, shows the
 > records it parses, dumps them as JSON, and reads them
 > back with a tiny Python "backend." It makes the
@@ -340,13 +340,13 @@ def Red : Color<"Red", 255, 0, 0>;
 
 | | X-macro | TableGen |
 |---|---|---|
-| The "list" is… | rows of text (`X(...)`) | typed records (`def`) with fields |
-| Expanded by… | the C preprocessor | a backend program in `*-tblgen` |
+| The "list" is... | rows of text (`X(...)`) | typed records (`def`) with fields |
+| Expanded by... | the C preprocessor | a backend program in `*-tblgen` |
 | Can compute / validate / inherit? | no | yes |
 | Data visible outside the compiler? | no | yes (e.g. `--dump-json`) |
 | Dependencies | none (it's just cpp) | the LLVM TableGen toolchain |
 
-TableGen doesn't *replace* the X-macro idea — it
+TableGen doesn't *replace* the X-macro idea -- it
 industrialises it. In fact TableGen's own generated
 output is consumed using the classic X-macro include
 trick (you'll see `#define GET_OP_CLASSES` / `#include
@@ -362,12 +362,12 @@ list feeding multiple derived artifacts.** Some real
 examples living on this machine:
 
 - [**`llvm/include/llvm/IR/Instruction.def`**][llvm-instr-def]
-  — every LLVM IR instruction, listed once, expanded
+  -- every LLVM IR instruction, listed once, expanded
   into enums (`Instruction.h`) *and* a visitor +
   dispatch switch (`InstVisitor.h`). A textbook
   X-macro.
 - [**`clang/include/clang/Basic/TokenKinds.def`**][clang-tok-def]
-  — every C/C++ token and keyword, once, with layered
+  -- every C/C++ token and keyword, once, with layered
   macros for keywords and language-version flags.
 - **The Gazprea compiler in this repo** uses *both*
   idioms deliberately:
@@ -382,14 +382,14 @@ examples living on this machine:
   - It even has one file,
     `gazc/include/Sema/SemaChecks.def`, whose own
     comment says it stays an X-macro *"so we avoid the
-    TableGen dependency"* — a real engineer making
+    TableGen dependency"* -- a real engineer making
     exactly the trade-off this lesson describes.
 
 **The judgement call.** X-macro when the list is
 simple, flat, and consumed only by your own C/C++.
 TableGen when the data is rich, is consumed by several
 tools, or needs computation, validation, or inheritance
-— and the project can carry the extra toolchain.
+-- and the project can carry the extra toolchain.
 Picking the *lighter* tool that still does the job is
 itself good hygiene.
 
@@ -425,8 +425,8 @@ Internet Archive (linked *(archived)*) so the reference
 survives link rot; snapshots were confirmed live in
 September 2026.
 
-- **X-macros — history (1960s origin) and definition:**
-  [Wikipedia, *X macro*][xmacro-wiki]
+- **X-macros -- history (1960s origin) and
+  definition:** [Wikipedia, *X macro*][xmacro-wiki]
   *([archived][xmacro-wiki-a])*; [Hackaday, *The X
   Macro: A Historic Preprocessor
   Hack*][xmacro-hackaday]
@@ -443,7 +443,7 @@ September 2026.
 - **TableGen's purpose and pipeline:** [LLVM, *TableGen
   Overview*][tablegen-doc]
   *([archived][tablegen-doc-a])*.
-- **Real X-macros referenced in §4:**
+- **Real X-macros referenced in sec. 4:**
   [`llvm/.../Instruction.def`][llvm-instr-def] (also on
   this machine at
   `../../LLVM/llvm-project/llvm/include/llvm/IR/Instruction.def`)

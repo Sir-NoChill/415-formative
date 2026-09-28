@@ -1,4 +1,4 @@
-# ex04 — A real MLIR dialect built with mlir-tblgen
+# ex04 -- A real MLIR dialect built with mlir-tblgen
 
 ## 1. What this example teaches
 
@@ -8,8 +8,8 @@ This is the capstone Lesson 2 example. It targets:
 - **Adapt an existing set of TableGen tools to your own
   custom project.**
 
-You'll build a small but **real** MLIR *dialect* — a
-set of custom compiler operations — where the C++ is
+You'll build a small but **real** MLIR *dialect* -- a
+set of custom compiler operations -- where the C++ is
 generated from TableGen by `mlir-tblgen`, exactly the
 way the `gaz` dialect in the Gazprea compiler is built.
 This is the "advanced X-macro" idea from ex02 taken all
@@ -63,9 +63,9 @@ add_mlir_dialect(DemoOps demo)
 That one call runs `mlir-tblgen` several times over
 `DemoOps.td` and writes, into the build directory:
 
-- `DemoOps.h.inc` / `DemoOps.cpp.inc` — the C++ **op
+- `DemoOps.h.inc` / `DemoOps.cpp.inc` -- the C++ **op
   classes**,
-- `DemoOpsDialect.h.inc` / `DemoOpsDialect.cpp.inc` —
+- `DemoOpsDialect.h.inc` / `DemoOpsDialect.cpp.inc` --
   the C++ **dialect class**.
 
 ## 4. Analyzing the TableGen construct: read one op
@@ -81,31 +81,32 @@ def Demo_AddOp : Demo_Op<"add", [Pure, SameOperandsAndResultType]> {
 }
 ```
 
-Line by line — this is the "analyze a TableGen
+Line by line -- this is the "analyze a TableGen
 construct" skill:
 
-- `def Demo_AddOp : Demo_Op<"add", ...>` — define an op
-  with the textual mnemonic `demo.add`. `Demo_Op` is
+- `def Demo_AddOp : Demo_Op<"add", ...>` -- define an
+  op with the textual mnemonic `demo.add`. `Demo_Op` is
   the base class from `DemoDialect.td`.
-- `[Pure, SameOperandsAndResultType]` — **traits**.
+- `[Pure, SameOperandsAndResultType]` -- **traits**.
   `Pure` = no side effects. `SameOperandsAndResultType`
   = all three types are equal, which is what lets the
   printer show a single `: i32` and the parser infer
   the operand types from it.
-- `arguments = (ins I32:$lhs, I32:$rhs)` — two `i32`
+- `arguments = (ins I32:$lhs, I32:$rhs)` -- two `i32`
   inputs, named. `(ins ...)` is a *dag*, TableGen's
   parenthesised list notation.
-- `results = (outs I32:$result)` — one `i32` output.
-- `assemblyFormat = "..."` — a **declarative grammar**.
-  From this one string, `mlir-tblgen` generates *both*
-  the parser and the printer for the textual form
-  `demo.add %a, %b : i32`. No hand-written C++.
+- `results = (outs I32:$result)` -- one `i32` output.
+- `assemblyFormat = "..."` -- a **declarative
+  grammar**. From this one string, `mlir-tblgen`
+  generates *both* the parser and the printer for the
+  textual form `demo.add %a, %b : i32`. No hand-written
+  C++.
 
 From those five lines the generator produces a full C++
 class: a builder, accessors (`getLhs()`, `getRhs()`), a
 verifier, a parser, and a printer. That is an enormous
 amount of correct, consistent C++ from a tiny
-declaration — the payoff of TableGen.
+declaration -- the payoff of TableGen.
 
 ### See it actually work
 
@@ -126,14 +127,14 @@ module {
 ```
 
 If the tool parsed the file, the generated parser
-worked — proof the TableGen did its job.
+worked -- proof the TableGen did its job.
 `test/mul.mlir`, meanwhile, fails in the starter state:
 
 ```
 error: custom op 'demo.mul' is unknown
 ```
 
-## 5. Your exercise: adapt the tools — add `demo.mul`
+## 5. Your exercise: adapt the tools -- add `demo.mul`
 
 Teach the dialect a multiply op **without writing any
 C++**.
@@ -172,9 +173,9 @@ module {
 }
 ```
 
-### What you did *not* have to touch — the whole point
+### What you did *not* have to touch -- the whole point
 
-- No parser, printer, verifier, or builder —
+- No parser, printer, verifier, or builder --
   `mlir-tblgen` generated them.
 - No registration edit in `DemoDialect.cpp`. Look at
   it:
@@ -189,10 +190,11 @@ module {
   `GET_OP_LIST` is generated **from the same `.td`**,
   so your new op registered itself. Notice that this
   include is the exact `.def`/X-macro idiom from Lesson
-  1 — the *same* `.inc` file is included in `DemoOps.h`
-  (with `GET_OP_CLASSES`) to get declarations and here
-  to get the op list. TableGen produced the file; the
-  classic include protocol consumes it.
+  1 -- the *same* `.inc` file is included in
+  `DemoOps.h` (with `GET_OP_CLASSES`) to get
+  declarations and here to get the op list. TableGen
+  produced the file; the classic include protocol
+  consumes it.
 
 You extended a compiler's instruction set by adding one
 declaration. That is "adapting an existing set of
@@ -208,7 +210,7 @@ thing:
   `arguments` / `results` / `assemblyFormat` vocabulary
   you just used.
 - `gazc/include/Gazprea/CMakeLists.txt` calls
-  `add_mlir_dialect(GazpreaOps gaz)` — the same
+  `add_mlir_dialect(GazpreaOps gaz)` -- the same
   one-liner as ours.
 - Gazprea even ships a **custom** TableGen tool,
   `gazprea-tblgen`, with hand-written backends that

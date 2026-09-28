@@ -1,4 +1,4 @@
-# ex03 — Analyzing and adapting a token-kinds X-macro
+# ex03 -- Analyzing and adapting a token-kinds X-macro
 
 ## 1. What this example teaches
 
@@ -48,7 +48,7 @@ each site.
 
 1. **The `TokenKind` enum.** `#define TOK(Name)
    tok_##Name,` (the `##` pastes tokens together, so
-   `TOK(plus)` → `tok_plus,`). Because `PUNCTUATOR`
+   `TOK(plus)` -> `tok_plus,`). Because `PUNCTUATOR`
    falls back to `TOK`, punctuators are included too.
    Result: one enumerator per row, plus a free
    `NUM_TOKENS` count at the end.
@@ -59,10 +59,10 @@ each site.
 3. **`describeToken()`** defines *only* `PUNCTUATOR`,
    so plain `TOK`s expand to nothing and only the six
    punctuators produce `case` arms returning their
-   literal spelling (`'+'`, `'('`, …).
+   literal spelling (`'+'`, `'('`, ...).
 
-4. **`punctuatorFor(char c)`** — the actual lexer step
-   — again defines only `PUNCTUATOR`, turning each row
+4. **`punctuatorFor(char c)`** -- the actual lexer step
+   -- again defines only `PUNCTUATOR`, turning each row
    into `case '+': return tok_plus;`.
 
 Build and run (verified):
@@ -82,13 +82,13 @@ Lexing: 1+2*(3-4)
 
 **The analysis payoff:** every one of those four
 constructs is driven by the same six-line list. Change
-the list and all four change together — that is what
+the list and all four change together -- that is what
 you are learning to *see* when you read code like this.
 
 ## 4. Your exercise: adapt the template
 
 Switch to `starter/`. Its `main.cpp` is **identical**
-to the solution's — you will not touch it. Only
+to the solution's -- you will not touch it. Only
 `starter/tokens.def` differs: two punctuators are
 missing.
 
@@ -97,7 +97,7 @@ Run it first to see the "before":
 ```bash
 g++ -std=c++17 -Wall -Wextra starter/main.cpp -o lexdemo && ./lexdemo "5%2=1"
 ```
-Verified "before" output — `%` and `=` are not
+Verified "before" output -- `%` and `=` are not
 recognised:
 ```
   number     "5"
@@ -117,12 +117,12 @@ PUNCTUATOR('%', percent)
 Rebuild (do **not** edit `main.cpp`) and re-run. Now
 `5%2=1` lexes as `number percent number equal number`.
 
-The thing to notice — and the reason this exercise
-exists — is that you extended the lexer's vocabulary in
-**four** places (enum, two name switches, the character
-switch) by editing **one** file and adding **two**
-lines. You never opened the switch statements. *That*
-is adapting an X-macro template.
+The thing to notice -- and the reason this exercise
+exists -- is that you extended the lexer's vocabulary
+in **four** places (enum, two name switches, the
+character switch) by editing **one** file and adding
+**two** lines. You never opened the switch statements.
+*That* is adapting an X-macro template.
 
 ## 5. Cross-reference to a real compiler
 
@@ -130,15 +130,15 @@ You have now built, in miniature, the exact structure
 used in production:
 
 - **ParserByHand**
-  (`../../../../415-labs/ParserByHand/`) —
+  (`../../../../415-labs/ParserByHand/`) --
   `TokenKinds.def` drives its `TokenKind` enum plus the
   lexer's spelling/description switches.
-- **Clang** —
+- **Clang** --
   `clang/include/clang/Basic/TokenKinds.def` does the
   same at full scale, with extra layered macros for
   keywords, C++11 keywords, and language availability
   flags.
-- **Gazprea** (this repo's compiler) —
+- **Gazprea** (this repo's compiler) --
   `include/Operators.def` and `include/Keywords.def`
   are the lexer's hand-written X-macro tables.
 

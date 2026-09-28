@@ -1,4 +1,4 @@
-# ex06 — An ANTLR frontend: a homogeneous parse tree, typed handles over it
+# ex06 -- An ANTLR frontend: a homogeneous parse tree, typed handles over it
 
 ## 1. What this example teaches
 
@@ -8,12 +8,12 @@ exactly what ANTLR hands you, and where it sits on
 Lesson 3's homogeneous/heterogeneous axis. It drives
 two objectives:
 
-- **Define a homogeneous AST** (objective 1) — ANTLR's
+- **Define a homogeneous AST** (objective 1) -- ANTLR's
   parse tree *is* one.
 - **Compare and contrast homo vs. hetero** (objective
-  4) — the same language is parsed here into a
-  homogeneous tree and, in the ParserByHand lab, into a
-  heterogeneous one.
+  4) -- the same language is parsed here into a
+     homogeneous tree and, in the ParserByHand lab,
+     into a heterogeneous one.
 
 The tiny language (`Expr.g4`) is assignments over
 integer arithmetic: `x = 5; y = 2 * (x + 1); z = 17 %
@@ -25,12 +25,12 @@ integer arithmetic: `x = 5; y = 2 * (x + 1); z = 17 %
 `-Dlanguage=Cpp -visitor -no-listener -package calc`.
 From the grammar it emits, into `build/<variant>/gen/`:
 
-- `ExprLexer` — turns text into tokens (`ID`, `INT`,
-  `*`, `%`, `;`, …).
-- `ExprParser` — builds the parse tree; also holds the
+- `ExprLexer` -- turns text into tokens (`ID`, `INT`,
+  `*`, `%`, `;`, ...).
+- `ExprParser` -- builds the parse tree; also holds the
   nested **`*Context` classes**, one per labeled
   alternative.
-- `ExprBaseVisitor` — a visitor base with one `visitX`
+- `ExprBaseVisitor` -- a visitor base with one `visitX`
   per labeled alternative, each defaulting to "visit my
   children."
 
@@ -46,15 +46,15 @@ expr : expr op=('*'|'/'|'%') expr   # MulDiv
      ;
 ```
 
-Each tag makes ANTLR generate a typed context class —
+Each tag makes ANTLR generate a typed context class --
 `MulDivContext`, `AddSubContext`, `ParenContext`,
-`VarContext`, `IntContext` — and a matching
-`visitMulDiv`, `visitAddSub`, … Without the labels you
-would get one nameless `ExprContext` and have to index
-children positionally. The labels are what give you
-*typed handles* onto an otherwise untyped tree.
+`VarContext`, `IntContext` -- and a matching
+`visitMulDiv`, `visitAddSub`, ... Without the labels
+you would get one nameless `ExprContext` and have to
+index children positionally. The labels are what give
+you *typed handles* onto an otherwise untyped tree.
 
-## 3. The tree is homogeneous — read it
+## 3. The tree is homogeneous -- read it
 
 `main.cpp` parses the program, then prints the tree
 with `tree->toStringTree(&parser, true)`. Verified
@@ -82,7 +82,7 @@ Every interior node prints as a bare `(expr ...)` or
 `(stat ...)`. The multiply `(expr (expr 2) * (expr
 ...))`, the add `(expr (expr x) + (expr 1))`, the paren
 group, and the variable reference `(expr x)` are all
-the **same static C++ type** —
+the **same static C++ type** --
 `antlr4::tree::RuleContext`. Nothing in the *storage*
 distinguishes a multiply from an add; only the runtime
 rule index (and, for us, the operator token) does. That
@@ -130,7 +130,7 @@ expr op=('*'|'/') expr   # MulDiv   // starter: no '%'
 
 Because `%` is not a token, the lexer cannot even
 recognise it. Run `./run.sh starter` and the damage is
-visible — verified output:
+visible -- verified output:
 
 ```
 line 1:31 token recognition error at: '%'
@@ -138,7 +138,7 @@ line 1:33 extraneous input '4' expecting ';'
 ```
 
 The `z` statement mis-parses (`(stat z = (expr 17) 4
-;)` — the `% 4` is lost) and `z` evaluates to `17`
+;)` -- the `% 4` is lost) and `z` evaluates to `17`
 instead of `1`. The fix is one token:
 
 ```antlr
@@ -151,16 +151,16 @@ byte-for-byte identical between `starter/` and
 `solution/`. `%` routes to the *same* labeled
 alternative, `MulDiv`, and `visitMulDiv` already
 returns `l % r`. Widening an operator's token set adds
-no node type, so it never ripples into the visitor — a
+no node type, so it never ripples into the visitor -- a
 grammar-only change.
 
 ## 6. The two poles, one language
 
 The CMPUT 415 **ANTLR** lab
 (`415-labs/ANTLR/demo-finished/`) parses a small
-"Config" language — its `grammar/Config.g4` uses the
+"Config" language -- its `grammar/Config.g4` uses the
 very same labeled-alternative trick (`# mulDivExpr`, `#
-idExpr`, …), and `ConfigEvaluator` subclasses
+idExpr`, ...), and `ConfigEvaluator` subclasses
 `ConfigBaseVisitor` exactly as `Eval` does here. Its
 `main.cpp` even grabs the root the same way:
 `antlr4::tree::ParseTree *tree = parser.config();`.
@@ -168,7 +168,7 @@ That is a **homogeneous** parse tree.
 
 The **ParserByHand** lab
 (`415-labs/ParserByHand/demo-finished/`) parses the
-*same Config language* — but into a **heterogeneous**
+*same Config language* -- but into a **heterogeneous**
 AST: real classes `BinaryExpr`, `IdExpr`, `Assignment`,
 each with named, typed fields and LLVM-style
 `isa<>`/`dyn_cast<>`. Same language, opposite
@@ -181,7 +181,7 @@ reverse.
 ## 7. The bridge to Lesson 4
 
 A real compiler rarely stops at the parse tree. It
-commonly runs **one more pass** — a visitor whose job
+commonly runs **one more pass** -- a visitor whose job
 is to *build a heterogeneous AST* from the homogeneous
 parse tree (an `Eval`-shaped walk that, instead of
 computing a value, constructs a `BinaryExpr` node).
