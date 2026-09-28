@@ -20,7 +20,7 @@ monorepo, Clang, the CMPUT 415 *ParserByHand* and
 what you learn transfers directly to reading and
 extending real projects. **Those are reference
 material, not requirements:** every hands-on example in
-this pack is self-contained (see *Prerequisites*
+this pack is self-contained (see *Requirements & setup*
 below), and the pointers to `gazc`, the 415 labs, and
 the LLVM tree are there for when you have them, not
 assumed. Lesson 3 also covers **ANTLR**, since some
@@ -32,24 +32,34 @@ than by hand.
 > use; no template metaprogramming background is
 > assumed.
 
-## Requirements
+## Requirements & setup
 
-The CMPUT 415 lab machines already have everything
-below; to work on your own machine, follow the CMPUT
-415 setup documentation for the course toolchain.
+The CMPUT 415 lab machines already have the toolchain;
+to work on your own machine, follow the [CMPUT 415
+setup docs](https://cmput415.github.io/415-docs).
 
 - **A C++17 compiler** in `$CXX` (defaults to `c++`) --
   for ex01, ex03, ex05, ex07, ex08; nothing else.
 - **LLVM/MLIR 22** (`llvm-tblgen`, `mlir-tblgen`, the
   MLIR libraries; CMake >= 3.20 and Ninja) -- for ex02
-  and ex04.
+  and ex04. Located via `$LLVM_DIR` (the Gazprea
+  convention); ex02/ex04's `run.sh` set it for you.
 - **ANTLR 4** (a JVM, the tool jar, the C++ runtime) --
-  for ex06.
+  for ex06. On the lab machines these are already
+  present and ex06's `run.sh` finds them; otherwise set
+  `$ANTLR_JAR` / `$ANTLR_INS`.
 - **Python 3 + Material for MkDocs** -- only to build
   the documentation site locally
   (`scripts/build-docs.sh`).
 - **git** with the repository hooks enabled (`git
   config core.hooksPath .githooks`) to contribute.
+
+Copy the environment template for default `$CXX`,
+`$LLVM_DIR` and friends:
+
+```bash
+cp .envrc.template .envrc   # then edit the paths if your builds live elsewhere
+```
 
 > **Roadmap.** This pack may eventually be ported to
 > Sphinx and folded into the Gazprea documentation (the
@@ -123,36 +133,6 @@ construct.
 Every example ships a **`starter/`**, a
 **`solution/`**, and a **`WALKTHROUGH.md`** with the
 fully documented answer.
-
-## Prerequisites & setup
-
-- A C++17 compiler in `$CXX` (defaults to `c++`) -- for
-  ex01, ex03, ex05, ex07, ex08. No other dependencies.
-- A local **LLVM/MLIR 22** build -- for ex02
-  (`llvm-tblgen`) and ex04 (`mlir-tblgen` + MLIR
-  libraries). CMake >= 3.20 and Ninja for ex04.
-- **ANTLR** -- for ex06: a JVM, the ANTLR tool jar, and
-  the ANTLR C++ runtime. On the CMPUT 415 machines
-  these are already present
-  (`/usr/share/java/antlr-*-complete.jar` and
-  `415-labs/antlr-install/`), and ex06's `run.sh`
-  discovers them automatically; override with the
-  `ANTLR_JAR` and `ANTLR_INS` environment variables if
-  needed.
-
-The examples locate LLVM via the `LLVM_DIR` environment
-variable, the same convention as the Gazprea project.
-Copy the template and adjust if needed:
-
-```bash
-cp .envrc.template .envrc     # then edit LLVM_DIR if your build lives elsewhere
-# or just export it for the session:
-export LLVM_DIR="$HOME/Code/Compilers/LLVM/22.1.7"
-export MLIR_DIR="$LLVM_DIR/lib/cmake/mlir"
-```
-
-The `run.sh` scripts in ex02 and ex04 set these for you
-if you skip this step.
 
 ## Quick start
 
