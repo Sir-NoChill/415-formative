@@ -72,8 +72,21 @@ Read it critically. The drawbacks, worst first:
 
 ## 2. Designing an AST from scratch (objective 2)
 
-Design for a small imperative language, **Mini**. You can't design nodes for
-constructs you haven't named, so pin the grammar first:
+Design for a small imperative language, **Mini**.
+
+> **Where "Mini" comes from.** Mini is a small language **invented for this lesson
+> pack** — it is not a standard or historical language, and there is no external
+> spec to read. It is a deliberately tiny imperative core (declaration,
+> assignment, `if`/`while`, `print`, over `int`/`bool` expressions) chosen so that
+> a complete AST *and* a semantic pass fit in one readable file. It stands in the
+> long tradition of small teaching languages built to make compiler ideas
+> concrete — LLVM's [Kaleidoscope](https://llvm.org/docs/tutorial/), Lox from
+> [*Crafting Interpreters*](https://craftinginterpreters.com/), and the example
+> languages of the [Dragon Book](https://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools).
+> Nothing in these lessons depends on Mini specifically; the techniques transfer to
+> any AST.
+
+You can't design nodes for constructs you haven't named, so pin the grammar first:
 
 ```
 program := stmt*
@@ -144,9 +157,10 @@ is the lesson. There are two honest strategies:
 > **Rule of thumb.** Add a **node type** when the construct carries meaning later
 > passes must see or report on; **desugar** when it's pure convenience over an
 > existing core. Every node you add is a tax on every pass forever; every
-> desugaring is a small loss of source fidelity. This is why Clang keeps rich
-> sugar nodes and desugars *late*, while a teaching compiler often desugars early
-> to keep its core tiny.
+> desugaring is a small loss of source fidelity. This is why [Clang's
+> AST](https://clang.llvm.org/docs/IntroductionToTheClangAST.html) keeps rich sugar
+> nodes (it "closely resembles ... the written C++ code") and desugars *late*,
+> while a teaching compiler often desugars early to keep its core tiny.
 
 > **➡ ex08 exercise.** The starter has strategy A working and asks you to
 > implement the desugaring (strategy B). Before: strategy B prints `sum = 0`;
@@ -191,3 +205,13 @@ You've met the objectives if you can:
   `ASTNodes.td` into a visitor and traversal.
 - Read Clang's AST hierarchy (`clang/include/clang/AST/`, open source) and its
   `RecursiveASTVisitor` — the industrial version of ex07's visitor.
+
+## References
+
+- Clang AST & `ASTContext` — <https://clang.llvm.org/docs/IntroductionToTheClangAST.html>
+- Clang `RecursiveASTVisitor` — <https://clang.llvm.org/docs/RAVFrontendAction.html>
+- LLVM-style RTTI (`isa`/`cast`/`dyn_cast`/`classof`) — <https://llvm.org/docs/HowToSetUpLLVMStyleRTTI.html>
+- The expression problem (Wadler, 1998) — <https://homepages.inf.ed.ac.uk/wadler/papers/expression/expression.txt>
+- Small teaching languages: LLVM Kaleidoscope — <https://llvm.org/docs/tutorial/> · *Crafting Interpreters* (Lox) — <https://craftinginterpreters.com/>
+- Aho, Lam, Sethi & Ullman, *Compilers: Principles, Techniques & Tools* (Dragon Book) — <https://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools>
+- X-macros (the table idiom `mini_nodes.def` uses) — see Lesson 1, and <https://en.wikipedia.org/wiki/X_macro>

@@ -36,7 +36,8 @@ and there are two honest ways to do it. Choosing between them *is* the lesson.
 > **Rule of thumb.** Add a **node** when the construct carries meaning later
 > passes must see or report on; **desugar** when it is pure convenience over an
 > existing core. Every node you add is a tax on every pass forever; every
-> desugaring is a small loss of source fidelity. This is why Clang keeps rich
+> desugaring is a small loss of source fidelity. This is why
+> [Clang](https://clang.llvm.org/docs/IntroductionToTheClangAST.html) keeps rich
 > sugar nodes and desugars *late*, while a teaching compiler often desugars early
 > to keep its core tiny.
 

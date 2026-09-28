@@ -124,7 +124,7 @@ Strategy A never changed — the point is that B *catches up to* A once the
 desugaring is right, producing the identical `15` from a tree that contains no
 `For` node whatsoever.
 
-## 5. The trade-off, tied to the expression problem
+## 5. The trade-off, tied to the [expression problem](https://homepages.inf.ed.ac.uk/wadler/papers/expression/expression.txt)
 
 Lesson 3 framed the tension: adding a **variant** (a new node) is cheap in a
 class-per-node design but forces a new **operation** case everywhere; adding an
@@ -137,9 +137,10 @@ source: it says `while`, and no `for`-specific diagnostic, refactoring, or
 So the rule of thumb: **add a node** when the construct carries meaning a later
 pass must see or report on; **desugar** when it is pure convenience over a core
 that already exists. Every node is a tax on every pass forever; every desugaring
-is a small loss of source fidelity. This is exactly why Clang keeps rich sugar
-nodes (`ForStmt`, `CXXForRangeStmt`) and desugars *late*, at CodeGen — it wants
-the sugar available for diagnostics and tooling first.
+is a small loss of source fidelity. This is exactly why
+[Clang](https://clang.llvm.org/docs/IntroductionToTheClangAST.html) keeps rich
+sugar nodes (`ForStmt`, `CXXForRangeStmt`) and desugars *late*, at CodeGen — it
+wants the sugar available for diagnostics and tooling first.
 
 ## 6. Now do it on real code
 
