@@ -13,7 +13,7 @@ type(scope): subject
 - **types** are listed in [`TAGS.md`](TAGS.md).
 - **scopes** are listed in [`SCOPES.md`](SCOPES.md).
 - subject: imperative mood, lowercase initial, no
-  trailing period, ≤ 50 chars.
+  trailing period, <= 50 chars.
 
 Example: `feat(ex07): add Mini AST and
 semantic-analysis pass`
@@ -41,7 +41,7 @@ instead.
 
 ## Text width (55 columns)
 
-Both code and prose wrap at **55 columns** — a
+Both code and prose wrap at **55 columns** -- a
 comfortable reading measure. (The reader-facing line
 length on the website is set by the site's CSS
 `max-width`; this 55-col rule is the source
@@ -56,18 +56,27 @@ convention.)
 - **Prose:** wrap Markdown at 55 with `python3
   scripts/wrap-md.py <file>...`, and check with
   `python3 scripts/check-md-width.py <file>...`. The
-  check is lenient — it ignores code fences, tables,
+  check is lenient -- it ignores code fences, tables,
   headings, link definitions, and lines whose first
   token alone runs past 55 (long URLs, paths, `code`).
 
+## ASCII only
+
+Markdown and C++ sources use ASCII characters only
+(checked by `scripts/check-ascii.py` in pre-commit).
+Write `--` for an em dash, `-` for an en dash, `->` for
+an arrow, `<=` / `>=`, `...` for an ellipsis, and
+`sec.` for a section reference. This keeps the sources
+portable and greppable.
+
 ## Building the examples
 
-- **ex01, ex03, ex05, ex07, ex08** — a C++17 compiler
+- **ex01, ex03, ex05, ex07, ex08** -- a C++17 compiler
   only (`g++` or `clang++`): `g++ -std=c++17 -Wall
   -Wextra solution/main.cpp -o out && ./out`.
-- **ex02, ex04** — a local LLVM/MLIR build
+- **ex02, ex04** -- a local LLVM/MLIR build
   (`llvm-tblgen` / `mlir-tblgen`); see each example's
   `run.sh`.
-- **ex06** — an ANTLR 4 tool jar + the ANTLR C++
+- **ex06** -- an ANTLR 4 tool jar + the ANTLR C++
   runtime; `./run.sh` (`CXX=clang++ ./run.sh` to use
   Clang).
