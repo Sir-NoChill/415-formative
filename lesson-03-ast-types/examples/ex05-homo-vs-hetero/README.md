@@ -45,7 +45,8 @@ that convention.
 
 `hetero` splits the same information across classes. `Binary` has real `lhs`/`rhs`
 fields of type `Expr*`; `Assign` has a `name` and a `value`. Kind discrimination is
-LLVM-style **hand-rolled RTTI**: each class defines `static bool classof(Node*)`,
+[LLVM-style **hand-rolled RTTI**](https://llvm.org/docs/HowToSetUpLLVMStyleRTTI.html):
+each class defines `static bool classof(Node*)`,
 and the free templates `isa<T>`, `dyn_cast<T>`, `cast<T>` build on it (the exact
 idiom from ParserByHand's `AST.h`, in miniature).
 

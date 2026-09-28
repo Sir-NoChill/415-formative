@@ -1,8 +1,8 @@
 # ex06 — antlr-frontend
 
 **Lesson 3.** Define a homogeneous AST (objective 1) and see the homo/hetero
-trade-off in a *real* frontend (objective 4) — via ANTLR, because some students
-build their parser with it. Needs a **JVM**, the **ANTLR tool jar**, and the
+trade-off in a *real* frontend (objective 4) — via [ANTLR](https://www.antlr.org/),
+because some students build their parser with it. Needs a **JVM**, the **ANTLR tool jar**, and the
 **ANTLR C++ runtime** (headers + `libantlr4-runtime.a`).
 
 ```bash

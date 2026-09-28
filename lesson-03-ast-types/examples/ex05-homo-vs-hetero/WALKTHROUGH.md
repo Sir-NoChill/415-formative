@@ -160,7 +160,9 @@ one. That is the heterogeneous payoff, and the cost is the ceremony you see: a
 class per construct and `classof`/`dyn_cast` to recover types the homogeneous
 version never lost track of (because it never had them).
 
-This is the **expression problem** in miniature. Adding a *new node type* is cheap
+This is the
+[**expression problem**](https://homepages.inf.ed.ac.uk/wadler/papers/expression/expression.txt)
+in miniature. Adding a *new node type* is cheap
 in `homo` (a new tag value) and costly in `hetero` (a new class, touched by every
 pass). Adding a *new pass* is a single tag-`switch` function in `homo` but is
 type-checked and self-documenting in `hetero`. Neither pole is free on both axes.

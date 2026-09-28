@@ -48,14 +48,15 @@ node have?**
 
 - A **homogeneous AST** uses *one* node type for the whole language. A node is a
   generic record with a runtime **kind** tag, some payload, and a uniform list of
-  children. Lisp s-expressions and ANTLR's parse tree are homogeneous: an
-  addition, an `if`, and a call are all the *same* C++ type, told apart only by a
-  tag you check at runtime.
+  children. Lisp s-expressions and [ANTLR](https://www.antlr.org/)'s parse tree are
+  homogeneous: an addition, an `if`, and a call are all the *same* C++ type, told
+  apart only by a tag you check at runtime.
 - A **heterogeneous AST** gives each construct its *own* static type — a class
   `BinaryExpr`, a class `IdExpr`, a class `Assignment` — usually sharing a base.
   Each class has exactly the fields that construct needs, with real names and
-  types (`lhs`, `rhs`, `cond`), not a nameless `kids[2]`. This is the Clang/LLVM
-  style, and the style of ParserByHand and Gazprea.
+  types (`lhs`, `rhs`, `cond`), not a nameless `kids[2]`. This is the
+  [Clang/LLVM](https://clang.llvm.org/docs/IntroductionToTheClangAST.html) style,
+  and the style of ParserByHand and Gazprea.
 
 > **➡ Do ex05 now.** `examples/ex05-homo-vs-hetero/` builds the *same* three
 > assignments — including `y = 2 * (x + 1)` — **twice**, once each way, and runs
@@ -64,7 +65,10 @@ node have?**
 
 ### The three-way refinement you'll actually meet
 
-Terence Parr (of ANTLR) splits the space into three:
+This taxonomy is [Terence Parr](https://www.antlr.org/)'s, from his book
+[*Language Implementation Patterns*](https://pragprog.com/titles/tpdsl/language-implementation-patterns/)
+(Pragmatic Bookshelf, 2010); Parr is also the author of ANTLR. He splits the space
+into three:
 
 - **Homogeneous** — one node type.
 - **Normalized heterogeneous** — many node types, but a *uniform* child list on
@@ -106,6 +110,7 @@ canonical X-macro / TableGen client.**
 
 ### LLVM-style RTTI, the idiom to recognize
 
+([Full details in the LLVM docs](https://llvm.org/docs/HowToSetUpLLVMStyleRTTI.html).)
 LLVM does not use C++ `dynamic_cast`. Every node carries a `Kind` enum and each
 class defines a static `classof`; `isa<T>`, `cast<T>`, and `dyn_cast<T>` build on
 it. Order the enum so a category's members are *contiguous* and `classof` becomes
@@ -153,7 +158,9 @@ pass) and `lib/ASTPrinter.cpp` (an unparse pass built on the generated visitor).
 | Self-documentation / IDE | Poor; you must know the tag + arity conventions. | Excellent; fields are named and typed. |
 | Where errors surface | Late, at runtime. | Early, at compile time. |
 
-This is the **expression problem**: you have two axes of change — new *node types*
+This is the
+[**expression problem**](https://homepages.inf.ed.ac.uk/wadler/papers/expression/expression.txt)
+(a term Philip Wadler named in 1998): you have two axes of change — new *node types*
 and new *passes* — and no single representation makes both free. A homogeneous
 AST makes new node types trivial but taxes every pass; a heterogeneous AST makes
 new passes clean but ripples a new node type through every visitor. Pick the
@@ -181,12 +188,13 @@ Lesson 4.
 
 ### The reconciliation: MLIR / the `gaz` dialect
 
-Real infrastructure blends the poles. MLIR (which the `gaz` dialect in Gazprea is
-built on — see Lesson 2's ex04) represents everything as a uniform `Operation`
-(homogeneous storage: generic operands, results, attributes, regions) but layers
-*typed* Op wrappers and *interfaces* on top, so passes get heterogeneous
-ergonomics and generic traversal at once. Neither pole is "correct"; each
-optimizes a different cheap axis.
+Real infrastructure blends the poles. [MLIR](https://mlir.llvm.org/docs/LangRef/)
+(which the `gaz` dialect in Gazprea is built on — see Lesson 2's ex04) represents
+everything as a uniform `Operation` (homogeneous storage: generic operands,
+results, attributes, regions) but layers *typed* Op wrappers (via its
+[Operation Definition Specification](https://mlir.llvm.org/docs/DefiningDialects/Operations/))
+and *interfaces* on top, so passes get heterogeneous ergonomics and generic
+traversal at once. Neither pole is "correct"; each optimizes a different cheap axis.
 
 ---
 
@@ -212,3 +220,14 @@ You've met the objectives if you can:
   backend — the TableGen version of everything above.
 - Then continue to **Lesson 4**, where you design, decorate, and extend an AST
   yourself.
+
+## References
+
+- Terence Parr, *Language Implementation Patterns* (the homo / normalized-hetero /
+  irregular-hetero taxonomy) — <https://pragprog.com/titles/tpdsl/language-implementation-patterns/>
+- ANTLR (homogeneous parse tree; labeled alternatives) — <https://www.antlr.org/>
+- LLVM-style RTTI (`isa`/`cast`/`dyn_cast`/`classof`) — <https://llvm.org/docs/HowToSetUpLLVMStyleRTTI.html>
+- Clang AST, `ASTContext`, `RecursiveASTVisitor` — <https://clang.llvm.org/docs/IntroductionToTheClangAST.html>, <https://clang.llvm.org/docs/RAVFrontendAction.html>
+- MLIR — Language Reference (uniform `Operation`) and Operation Definition Spec —
+  <https://mlir.llvm.org/docs/LangRef/>, <https://mlir.llvm.org/docs/DefiningDialects/Operations/>
+- The expression problem (Wadler, 1998) — <https://homepages.inf.ed.ac.uk/wadler/papers/expression/expression.txt>
