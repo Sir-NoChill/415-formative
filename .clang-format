@@ -1,0 +1,4 @@
+# The example C++ is written in LLVM's own style, to match the real code the
+# lessons reference (Clang, MLIR, ParserByHand, gazc).
+BasedOnStyle: LLVM
+Standard: c++17

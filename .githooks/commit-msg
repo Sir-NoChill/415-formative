@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# commit-msg hook: enforce Conventional Commits with a MANDATORY scope.
+#
+# Allowed types come from TAGS.md and allowed scopes from SCOPES.md (parsed from
+# the backtick-quoted tokens), so those two files are the single source of truth.
+set -euo pipefail
+
+msg_file="$1"
+root="$(git rev-parse --show-toplevel)"
+subject="$(sed -n '1p' "$msg_file")"
+
+# Let git's own generated messages through (merges, reverts, fixups, squashes).
+case "$subject" in
+  "Merge "*|"Revert "*|"fixup! "*|"squash! "*) exit 0 ;;
+esac
+
+extract() { sed -n 's/^- `\([a-z0-9-]\{1,\}\)`.*/\1/p' "$1" | paste -sd'|' -; }
+types="$(extract "$root/TAGS.md")"
+scopes="$(extract "$root/SCOPES.md")"
+
+if [ -z "$types" ] || [ -z "$scopes" ]; then
+  echo "commit-msg: could not read TAGS.md / SCOPES.md; aborting." >&2
+  exit 1
+fi
+
+re="^(${types})\((${scopes})\)!?: .+"
+if [[ ! "$subject" =~ $re ]]; then
+  cat >&2 <<EOF
+commit-msg: subject does not match Conventional Commits with a required scope.
+
+  got:      $subject
+  expected: <type>(<scope>): <subject>
+
+  types  (TAGS.md):  ${types//|/, }
+  scopes (SCOPES.md): ${scopes//|/, }
+
+  e.g.  feat(ex05): add homogeneous-vs-heterogeneous example
+EOF
+  exit 1
+fi
+
+# Style: no trailing period on the subject.
+case "$subject" in
+  *.) echo "commit-msg: drop the trailing period from the subject." >&2; exit 1 ;;
+esac
+
+# Soft length guidance (warn only).
+if [ "${#subject}" -gt 72 ]; then
+  echo "commit-msg: note — subject is ${#subject} chars (aim for <= 50, hard cap 72)." >&2
+fi
+
+exit 0

@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# pre-commit hook: keep the repository from breaking.
+#   1. clang-format check on staged C++ (LLVM style, from .clang-format)
+#   2. shellcheck on staged shell scripts
+#   3. a -Werror build smoke test of the self-contained g++ examples when their
+#      sources are staged (ex05, ex07, ex08; ex06 needs ANTLR/Java and is left to
+#      manual `run.sh`)
+# Missing optional tools degrade to a warning rather than blocking.
+set -euo pipefail
+
+root="$(git rev-parse --show-toplevel)"
+staged="$(git diff --cached --name-only --diff-filter=ACM)"
+[ -n "$staged" ] || exit 0
+
+# 1. clang-format --------------------------------------------------------------
+cpp="$(echo "$staged" | grep -E '\.(cpp|cc|h|hpp)$' | grep -vE '(^|/)(build|gen)/' || true)"
+if [ -n "$cpp" ]; then
+  if command -v clang-format >/dev/null 2>&1; then
+    bad=0
+    while IFS= read -r f; do
+      [ -f "$f" ] || continue
+      if ! diff -q "$f" <(clang-format "$f") >/dev/null 2>&1; then
+        echo "pre-commit: needs clang-format: $f"; bad=1
+      fi
+    done <<< "$cpp"
+    [ "$bad" -eq 0 ] || { echo "pre-commit: run 'clang-format -i <file>' and re-stage." >&2; exit 1; }
+  else
+    echo "pre-commit: clang-format not found; skipping format check." >&2
+  fi
+fi
+
+# 2. shellcheck ----------------------------------------------------------------
+sh="$(echo "$staged" | grep -E '\.sh$|(^|/)(pre-commit|commit-msg)$' || true)"
+if [ -n "$sh" ] && command -v shellcheck >/dev/null 2>&1; then
+  # shellcheck disable=SC2086
+  while IFS= read -r f; do
+    [ -f "$f" ] || continue
+    shellcheck -x --severity=warning "$f" || { echo "pre-commit: shellcheck failed: $f" >&2; exit 1; }
+  done <<< "$sh"
+fi
+
+# 3. build smoke test ----------------------------------------------------------
+if echo "$staged" | grep -qE 'ex0[578].*\.(cpp|def)$'; then
+  CXX="${CXX:-g++}"
+  command -v "$CXX" >/dev/null 2>&1 || CXX=c++
+  out="$(mktemp)"
+  trap 'rm -f "$out"' EXIT
+  for d in lesson-03-ast-types/examples/ex05-homo-vs-hetero \
+           lesson-04-ast-development/examples/ex07-mini-ast \
+           lesson-04-ast-development/examples/ex08-adapt-add-for; do
+    for v in solution starter; do
+      f="$root/$d/$v/main.cpp"
+      [ -f "$f" ] || continue
+      if ! "$CXX" -std=c++17 -Wall -Wextra -Werror "$f" -o "$out" 2>/tmp/precommit_cc.log; then
+        echo "pre-commit: build failed ($CXX): $d/$v" >&2
+        sed 's/^/    /' /tmp/precommit_cc.log >&2
+        exit 1
+      fi
+    done
+  done
+fi
+
+exit 0
