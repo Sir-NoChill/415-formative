@@ -1,0 +1,173 @@
+/* University of Alberta theme for Material for MkDocs.
+   Tokens from the U of A design system (Master Brand Guidelines 2025/26):
+   ua-green #275D38, ua-gold #F2CD00, Digital White #F5F5F5, Digital Black #2B292A,
+   Roboto / Roboto Slab / Roboto Mono. Square-cornered brand. */
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;700;900&display=swap");
+
+/* ---- Light (default scheme) ---- */
+[data-md-color-scheme="default"] {
+  --md-default-bg-color:        #f5f5f5; /* surface */
+  --md-default-fg-color:        #2b292a; /* ink */
+  --md-default-fg-color--light: #5a5758; /* ink-muted */
+  --md-default-fg-color--lighter: #8c8a8b80;
+  --md-default-fg-color--lightest: #8c8a8b26;
+
+  --md-primary-fg-color:        #275d38; /* ua-green: header, h-accents */
+  --md-primary-fg-color--light: #38784e;
+  --md-primary-fg-color--dark:  #1c4429;
+  --md-primary-bg-color:        #ffffff; /* on-brand: text on green header */
+  --md-primary-bg-color--light: #ffffffb3;
+
+  --md-accent-fg-color:         #007a33; /* hover/active: sec-green-356 */
+  --md-accent-fg-color--transparent: #007a3314;
+
+  --md-typeset-a-color:         #275d38; /* link */
+  --md-typeset-mark-color:      #f2cd0059; /* gold highlight */
+
+  --md-code-bg-color:           #ffffff; /* surface-raised */
+  --md-code-fg-color:           #2b292a;
+
+  --ua-line:  #8c8a8b;
+  --ua-accent:#f2cd00; /* gold, non-text only */
+  --ua-cream: #fff2cc;
+}
+
+/* ---- Dark (slate scheme) ---- */
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color:        #2b292a; /* surface (Digital Black) */
+  --md-default-fg-color:        #f5f5f5; /* ink */
+  --md-default-fg-color--light: #c9c7c8; /* ink-muted */
+  --md-default-fg-color--lighter: #84828380;
+  --md-default-fg-color--lightest: #84828326;
+
+  --md-primary-fg-color:        #275d38; /* keep the green header */
+  --md-primary-fg-color--light: #38784e;
+  --md-primary-fg-color--dark:  #1c4429;
+  --md-primary-bg-color:        #ffffff;
+  --md-primary-bg-color--light: #ffffffb3;
+
+  --md-accent-fg-color:         #6cc24a; /* lime */
+  --md-accent-fg-color--transparent: #6cc24a1f;
+
+  --md-typeset-a-color:         #6cc24a; /* link: lime in dark */
+  --md-typeset-mark-color:      #f2cd0040;
+
+  --md-code-bg-color:           #3a3839; /* surface-raised (derived) */
+  --md-code-fg-color:           #f5f5f5;
+
+  --ua-line:  #848283;
+  --ua-accent:#f2cd00;
+  --ua-cream: #463f2a;
+}
+
+/* ---- Typography: Roboto Slab for headings, Roboto for body ---- */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset .md-nav__title,
+.md-header__title {
+  font-family: "Roboto Slab", Georgia, serif;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+}
+/* Page title in brand green (light); ink in dark, where green fails as text. */
+[data-md-color-scheme="default"] .md-typeset h1 { color: #275d38; }
+[data-md-color-scheme="slate"]   .md-typeset h1 { color: #f5f5f5; }
+.md-typeset h1 { font-weight: 900; }
+
+/* A gold hairline under section headings — the brand's green-and-gold pairing. */
+.md-typeset h2 {
+  padding-bottom: 0.2em;
+  border-bottom: 2px solid var(--ua-accent);
+}
+
+/* ---- Reading measure: ~55 columns for prose; wide blocks stay full width. */
+.md-typeset p,
+.md-typeset ul,
+.md-typeset ol,
+.md-typeset blockquote {
+  max-width: 55ch;
+}
+.md-typeset .admonition p,
+.md-typeset .admonition ul,
+.md-typeset .admonition ol,
+.md-typeset blockquote p {
+  max-width: none; /* already inside a narrow container */
+}
+.md-typeset pre,
+.md-typeset table,
+.md-typeset .highlight,
+.md-typeset .md-typeset__table {
+  max-width: none;
+}
+
+/* ---- Square-cornered brand (small radius for code/inputs only) ---- */
+.md-typeset pre > code,
+.md-typeset .highlight,
+.md-typeset code,
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: 4px;
+}
+.md-typeset table:not([class]) { border-radius: 0; }
+
+/* Inline code: a hairline so it reads as a chip on the light surface. */
+.md-typeset code {
+  border: 1px solid var(--md-default-fg-color--lightest);
+}
+.md-typeset pre > code { border: 1px solid var(--ua-line); }
+
+/* ---- Links: underline in body copy (colour is not the only cue) ---- */
+.md-typeset a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+.md-typeset a:hover { text-decoration: underline; }
+
+/* ---- Tables: green header row, gold-free, hairline rules ---- */
+.md-typeset table:not([class]) th {
+  background: var(--md-primary-fg-color);
+  color: #ffffff;
+  font-family: "Roboto", sans-serif;
+}
+.md-typeset table:not([class]) td,
+.md-typeset table:not([class]) th {
+  border-color: var(--md-default-fg-color--lightest);
+}
+
+/* ---- Admonitions: map to U of A semantic tints ---- */
+:root {
+  --md-admonition-icon--note: var(--md-admonition-icon--abstract);
+}
+.md-typeset .admonition,
+.md-typeset details { border-width: 0 0 0 3px; }
+
+/* note/info → info blue */
+[data-md-color-scheme="default"] .md-typeset .admonition.note,
+[data-md-color-scheme="default"] .md-typeset details.note {
+  border-left-color: #2f5d8f; background: #e4edf8;
+}
+/* tip/success → PMS 356 green */
+[data-md-color-scheme="default"] .md-typeset .admonition.tip,
+[data-md-color-scheme="default"] .md-typeset .admonition.success {
+  border-left-color: #007a33; background: #e3f2e6;
+}
+/* warning → darkened amber on cream */
+[data-md-color-scheme="default"] .md-typeset .admonition.warning {
+  border-left-color: #8a5a00; background: #fff2cc;
+}
+/* danger → darkened coral */
+[data-md-color-scheme="default"] .md-typeset .admonition.danger {
+  border-left-color: #b1412c; background: #fbe3de;
+}
+
+/* ---- Header/footer: solid ua-green already via --md-primary-fg-color ---- */
+.md-header, .md-tabs { background-color: var(--md-primary-fg-color); }
+
+/* Active nav tab: a gold underline on the green bar (decorative, not text). */
+.md-tabs__link--active { border-bottom: 3px solid var(--ua-accent); }
+
+/* Selection in brand gold tint. */
+::selection { background: #f2cd0059; }

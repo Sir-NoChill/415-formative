@@ -14,4 +14,9 @@ git archive HEAD -- \
   lesson-01-foundations lesson-02-synthesis lesson-03-ast-types lesson-04-ast-development \
   | tar -x -C _docs
 
+# Theme assets (U of A stylesheet, logo, favicon) — copied from the worktree so
+# local builds pick up uncommitted tweaks; in CI the worktree is the checkout.
+mkdir -p _docs/assets
+cp -R mkdocs-assets/. _docs/assets/
+
 mkdocs build "$@"

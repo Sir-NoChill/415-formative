@@ -12,8 +12,16 @@ repo_name: Sir-NoChill/415-formative
 # still resolve (MkDocs treats each README.md as its directory's index).
 docs_dir: _docs
 
+extra_css:
+  - assets/ua.css
+
 theme:
   name: material
+  logo: assets/ua-logo-white.svg
+  favicon: assets/ua-logo-green.svg
+  font:
+    text: Roboto
+    code: Roboto Mono
   features:
     - navigation.sections
     - navigation.top
