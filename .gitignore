@@ -21,3 +21,7 @@ gen/
 .cache/
 compile_commands.json
 .DS_Store
+
+# MkDocs build
+/_docs/
+/site/

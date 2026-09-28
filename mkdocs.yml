@@ -1,0 +1,79 @@
+site_name: LLVM Infrastructure Lessons
+site_description: >-
+  X-macros, TableGen, and ASTs — a hands-on lesson pack on the code-generation
+  techniques and data structures at the heart of the LLVM/MLIR ecosystem.
+repo_url: https://github.com/Sir-NoChill/415-formative
+repo_name: Sir-NoChill/415-formative
+
+# The lesson content lives at the repo root (a README.md per lesson/example), but
+# MkDocs 1.6 forbids docs_dir being the config's own directory. So `scripts/build-docs.sh`
+# stages the committed lesson tree into _docs/ (via `git archive`) and builds from
+# there; the structure is preserved, so in-prose links between lessons/examples
+# still resolve (MkDocs treats each README.md as its directory's index).
+docs_dir: _docs
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - content.code.copy
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - toc:
+      permalink: true
+  - tables
+
+nav:
+  - Home: README.md
+  - "Lesson 1 — Foundations":
+      - Overview: lesson-01-foundations/README.md
+      - "ex01 · colors X-macro": lesson-01-foundations/examples/ex01-colors-xmacro/README.md
+      - "ex01 · walkthrough": lesson-01-foundations/examples/ex01-colors-xmacro/WALKTHROUGH.md
+      - "ex02 · hello TableGen": lesson-01-foundations/examples/ex02-hello-tablegen/README.md
+      - "ex02 · walkthrough": lesson-01-foundations/examples/ex02-hello-tablegen/WALKTHROUGH.md
+  - "Lesson 2 — Synthesis":
+      - Overview: lesson-02-synthesis/README.md
+      - "ex03 · tokenkinds analysis": lesson-02-synthesis/examples/ex03-tokenkinds-analysis/README.md
+      - "ex03 · walkthrough": lesson-02-synthesis/examples/ex03-tokenkinds-analysis/WALKTHROUGH.md
+      - "ex04 · mini dialect": lesson-02-synthesis/examples/ex04-mini-dialect-tablegen/README.md
+      - "ex04 · walkthrough": lesson-02-synthesis/examples/ex04-mini-dialect-tablegen/WALKTHROUGH.md
+  - "Lesson 3 — Types of ASTs":
+      - Overview: lesson-03-ast-types/README.md
+      - "ex05 · homo vs hetero": lesson-03-ast-types/examples/ex05-homo-vs-hetero/README.md
+      - "ex05 · walkthrough": lesson-03-ast-types/examples/ex05-homo-vs-hetero/WALKTHROUGH.md
+      - "ex06 · ANTLR frontend": lesson-03-ast-types/examples/ex06-antlr-frontend/README.md
+      - "ex06 · walkthrough": lesson-03-ast-types/examples/ex06-antlr-frontend/WALKTHROUGH.md
+  - "Lesson 4 — Developing ASTs":
+      - Overview: lesson-04-ast-development/README.md
+      - "ex07 · mini AST + sema": lesson-04-ast-development/examples/ex07-mini-ast/README.md
+      - "ex07 · walkthrough": lesson-04-ast-development/examples/ex07-mini-ast/WALKTHROUGH.md
+      - "ex08 · adapt (add for)": lesson-04-ast-development/examples/ex08-adapt-add-for/README.md
+      - "ex08 · walkthrough": lesson-04-ast-development/examples/ex08-adapt-add-for/WALKTHROUGH.md
+  - Reference:
+      - Contributing: CONTRIBUTING.md
+      - Commit types: TAGS.md
+      - Commit scopes: SCOPES.md
