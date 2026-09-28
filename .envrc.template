@@ -1,0 +1,16 @@
+# Environment for the X-macro / TableGen lessons.
+#
+# Setup:
+#   1. cp .envrc.template .envrc
+#   2. Edit LLVM_DIR below if your LLVM/MLIR 22 build lives elsewhere.
+#   3. `direnv allow`  (or just `source .envrc`)
+#
+# ex01 and ex03 need only a C++ compiler and ignore these variables.
+# ex02 needs llvm-tblgen; ex04 needs mlir-tblgen + the MLIR CMake package.
+# Both are found relative to LLVM_DIR.
+
+export LLVM_DIR="${LLVM_DIR:-$HOME/Code/Compilers/LLVM/22.1.7}"
+export MLIR_DIR="$LLVM_DIR/lib/cmake/mlir"
+
+# Convenience: put the LLVM tools (llvm-tblgen, mlir-tblgen) on PATH.
+export PATH="$LLVM_DIR/bin:$PATH"

@@ -1,0 +1,29 @@
+//===- colors.def - The X-macro table of colors ---------------------------===//
+//
+// This is an "X-macro" file. It is NOT a normal header:
+//   * It has NO include guard (we WANT it included many times).
+//   * It defines one fallback no-op macro so a careless includer still compiles.
+//   * It ends by #undef-ing that macro to leave no state behind.
+//
+// The single list below is the ONE place colors are declared. Everything else
+// (the enum, the name table, the hex table, the count) is generated from it.
+//
+// A consumer writes:
+//     #define COLOR(Name, Hex)  <whatever it needs>
+//     #include "colors.def"
+// and the preprocessor stamps out one line of code per COLOR(...) row.
+//
+//===----------------------------------------------------------------------===//
+
+#ifndef COLOR
+#define COLOR(Name, Hex) // no-op fallback: harmless if the includer forgot it
+#endif
+
+//      Name     Hex
+COLOR(  Red,     0xFF0000)
+COLOR(  Green,   0x00FF00)
+COLOR(  Blue,    0x0000FF)
+COLOR(  White,   0xFFFFFF)
+COLOR(  Cyan,    0x00FFFF)
+
+#undef COLOR

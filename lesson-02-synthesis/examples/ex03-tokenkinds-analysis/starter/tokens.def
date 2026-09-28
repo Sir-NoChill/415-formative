@@ -1,0 +1,40 @@
+//===- tokens.def - STARTER -------------------------------------------------===//
+//
+// Same token X-macro as the solution, but two punctuators are missing.
+//
+// TASK: teach the lexer two new punctuators WITHOUT editing main.cpp at all:
+//   1. '=' named `equal`
+//   2. '%' named `percent`
+//
+// Add one PUNCTUATOR row each below, rebuild, and run:
+//   g++ -std=c++17 -Wall -Wextra main.cpp -o lexdemo && ./lexdemo "5%2=1"
+//
+// Notice you never touched the enum, the name switch, the describe switch, or
+// the lexer switch -- all four updated themselves. THAT is the payoff of an
+// X-macro, and the thing you are meant to observe here.
+//
+//===----------------------------------------------------------------------===//
+
+#ifndef TOK
+#define TOK(Name)
+#endif
+
+#ifndef PUNCTUATOR
+#define PUNCTUATOR(Spelling, Name) TOK(Name)
+#endif
+
+TOK(eof)
+TOK(unknown)
+TOK(identifier)
+TOK(number)
+
+PUNCTUATOR('+', plus)
+PUNCTUATOR('-', minus)
+PUNCTUATOR('*', star)
+PUNCTUATOR('/', slash)
+PUNCTUATOR('(', l_paren)
+PUNCTUATOR(')', r_paren)
+// TASK: add '=' (equal) and '%' (percent) here.
+
+#undef PUNCTUATOR
+#undef TOK

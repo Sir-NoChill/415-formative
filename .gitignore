@@ -1,0 +1,18 @@
+# Per-machine environment (paths differ per user); commit .envrc.template instead.
+.envrc
+
+# CMake / Ninja build trees (ex04 and any local experiments).
+build/
+**/build/
+*.o
+*.a
+
+# Compiled example binaries (built ad hoc with g++).
+colors
+lexdemo
+a.out
+
+# Editor / OS noise.
+.cache/
+compile_commands.json
+.DS_Store

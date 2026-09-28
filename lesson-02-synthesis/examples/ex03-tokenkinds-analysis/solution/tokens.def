@@ -1,0 +1,40 @@
+//===- tokens.def - X-macro table of lexer token kinds --------------------===//
+//
+// This mirrors the real token X-macro used in the CMPUT 415 "ParserByHand" lab
+// and, in spirit, clang's clang/include/clang/Basic/TokenKinds.def.
+//
+// TWO layered macros:
+//   TOK(Name)                 - a token with no fixed spelling (eof, identifier)
+//   PUNCTUATOR(Spelling, Name)- a token that IS a single character ('+','(')
+//
+// The layering trick: if a consumer only cares about TOK, it does not have to
+// know PUNCTUATOR exists -- the fallback below routes every PUNCTUATOR through
+// TOK. If a consumer cares specifically about punctuators (e.g. the lexer's
+// character switch), it defines PUNCTUATOR and ignores the plain TOKs.
+//
+//===----------------------------------------------------------------------===//
+
+#ifndef TOK
+#define TOK(Name)
+#endif
+
+#ifndef PUNCTUATOR
+#define PUNCTUATOR(Spelling, Name) TOK(Name) // by default a punctuator is a TOK
+#endif
+
+// --- Tokens with no fixed spelling ---
+TOK(eof)
+TOK(unknown)
+TOK(identifier) // [a-zA-Z_][a-zA-Z0-9_]*
+TOK(number)     // [0-9]+
+
+// --- Punctuators: (spelling, name) ---
+PUNCTUATOR('+', plus)
+PUNCTUATOR('-', minus)
+PUNCTUATOR('*', star)
+PUNCTUATOR('/', slash)
+PUNCTUATOR('(', l_paren)
+PUNCTUATOR(')', r_paren)
+
+#undef PUNCTUATOR
+#undef TOK
