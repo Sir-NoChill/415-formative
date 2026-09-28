@@ -32,7 +32,7 @@ git config core.hooksPath .githooks
 - **pre-commit** runs `clang-format` on staged C++
   (LLVM style, see `.clang-format`), `shellcheck` on
   staged shell scripts, a `-Werror` build smoke test of
-  the self-contained `g++` examples (ex05, ex07, ex08)
+  the self-contained `$CXX` examples (ex05, ex07, ex08)
   when their sources change, and the Markdown width
   check (below) on staged `.md`.
 
@@ -72,8 +72,8 @@ portable and greppable.
 ## Building the examples
 
 - **ex01, ex03, ex05, ex07, ex08** -- a C++17 compiler
-  only (`g++` or `clang++`): `g++ -std=c++17 -Wall
-  -Wextra solution/main.cpp -o out && ./out`.
+  only (in `$CXX`): `$CXX -std=c++17 -Wall -Wextra
+  solution/main.cpp -o out && ./out`.
 - **ex02, ex04** -- a local LLVM/MLIR build
   (`llvm-tblgen` / `mlir-tblgen`); see each example's
   `run.sh`.

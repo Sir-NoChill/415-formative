@@ -7,7 +7,7 @@
 //   2. '%' named `percent`
 //
 // Add one PUNCTUATOR row each below, rebuild, and run:
-//   g++ -std=c++17 -Wall -Wextra main.cpp -o lexdemo && ./lexdemo "5%2=1"
+//   $CXX -std=c++17 -Wall -Wextra main.cpp -o lexdemo && ./lexdemo "5%2=1"
 //
 // Notice you never touched the enum, the name switch, the describe switch, or
 // the lexer switch -- all four updated themselves. THAT is the payoff of an

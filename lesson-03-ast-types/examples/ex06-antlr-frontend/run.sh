@@ -11,9 +11,9 @@
 # The ANTLR tool jar and C++ runtime are discovered automatically; override with
 # the ANTLR_JAR and ANTLR_INS environment variables. On the CMPUT 415 machines
 # the runtime lives in 415-labs/antlr-install (the same one the ANTLR lab uses).
-# The C++ compiler is $CXX (default g++); e.g. `CXX=clang++ ./run.sh`.
+# The C++ compiler is $CXX (default c++); e.g. `CXX=clang++ ./run.sh`.
 set -euo pipefail
-CXX="${CXX:-g++}"
+CXX="${CXX:-c++}"
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD="$HERE/build"

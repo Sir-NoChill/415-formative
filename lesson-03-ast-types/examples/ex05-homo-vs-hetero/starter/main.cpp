@@ -18,7 +18,7 @@
 // a tag (typos compile, arity is a convention); the heterogeneous walks name
 // their fields and dyn_cast (a wrong field access does not compile).
 //
-//   g++ -std=c++17 -Wall -Wextra starter/main.cpp -o ex05 && ./ex05
+//   $CXX -std=c++17 -Wall -Wextra starter/main.cpp -o ex05 && ./ex05
 //
 // The two constant-fold passes are stubbed as no-ops -- that is your exercise.
 //

@@ -68,7 +68,7 @@ each site.
 Build and run (verified):
 
 ```bash
-g++ -std=c++17 -Wall -Wextra solution/main.cpp -o lexdemo && ./lexdemo "1+2*(3-4)"
+$CXX -std=c++17 -Wall -Wextra solution/main.cpp -o lexdemo && ./lexdemo "1+2*(3-4)"
 ```
 ```
 There are 10 token kinds.
@@ -95,7 +95,7 @@ missing.
 Run it first to see the "before":
 
 ```bash
-g++ -std=c++17 -Wall -Wextra starter/main.cpp -o lexdemo && ./lexdemo "5%2=1"
+$CXX -std=c++17 -Wall -Wextra starter/main.cpp -o lexdemo && ./lexdemo "5%2=1"
 ```
 Verified "before" output -- `%` and `=` are not
 recognised:

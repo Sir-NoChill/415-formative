@@ -4,8 +4,8 @@
 template. No dependencies (plain C++17).
 
 ```bash
-g++ -std=c++17 -Wall -Wextra solution/main.cpp -o lexdemo && ./lexdemo "1+2*(3-4)"
-g++ -std=c++17 -Wall -Wextra starter/main.cpp  -o lexdemo && ./lexdemo "5%2=1"   # before the task
+$CXX -std=c++17 -Wall -Wextra solution/main.cpp -o lexdemo && ./lexdemo "1+2*(3-4)"
+$CXX -std=c++17 -Wall -Wextra starter/main.cpp  -o lexdemo && ./lexdemo "5%2=1"   # before the task
 ```
 
 A lexer token table (mirrors the *ParserByHand* lab and

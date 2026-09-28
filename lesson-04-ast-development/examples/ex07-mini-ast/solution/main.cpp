@@ -18,7 +18,7 @@
 //     reporting use-before-declaration and redeclaration;
 //   - type checking: arithmetic needs Int operands; a condition needs Bool.
 //
-//   g++ -std=c++17 -Wall -Wextra solution/main.cpp -o ex07 && ./ex07
+//   $CXX -std=c++17 -Wall -Wextra solution/main.cpp -o ex07 && ./ex07
 //
 //===----------------------------------------------------------------------===//
 

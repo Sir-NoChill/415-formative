@@ -4,8 +4,8 @@
 hygiene. No dependencies (plain C++17).
 
 ```bash
-g++ -std=c++17 -Wall -Wextra starter/main.cpp  -o colors && ./colors   # the drift bug
-g++ -std=c++17 -Wall -Wextra solution/main.cpp -o colors && ./colors   # fixed by an X-macro
+$CXX -std=c++17 -Wall -Wextra starter/main.cpp  -o colors && ./colors   # the drift bug
+$CXX -std=c++17 -Wall -Wextra solution/main.cpp -o colors && ./colors   # fixed by an X-macro
 ```
 
 - `starter/`  -- three parallel lists that have drifted

@@ -62,12 +62,12 @@ can't find them.
 Under the hood `run.sh` runs `java -jar <jar>
 -Dlanguage=Cpp -visitor -no-listener -package calc`
 over `Expr.g4`, then compiles `main.cpp` plus the
-generated `*.cpp` with `$CXX` (default `g++`) against
+generated `*.cpp` with `$CXX` (default `c++`) against
 the runtime. First run does the codegen + compile; that
 is all there is to it. To build with Clang instead:
 
 ```bash
-CXX=clang++ ./run.sh          # both g++ and clang++ are verified
+CXX=clang++ ./run.sh          # your C++17 compiler via CXX
 ```
 
 ## What to look at

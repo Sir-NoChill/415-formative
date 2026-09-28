@@ -12,7 +12,7 @@
 // of bug X-macros exist to make impossible.
 //
 // Build & run:
-//   g++ -std=c++17 -Wall -Wextra main.cpp -o colors && ./colors
+//   $CXX -std=c++17 -Wall -Wextra main.cpp -o colors && ./colors
 //
 // Your task (see ../WALKTHROUGH.md): replace all three hand-maintained lists
 // with a single X-macro table so they can never drift apart again. The finished

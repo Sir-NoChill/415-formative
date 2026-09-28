@@ -27,8 +27,8 @@ By the end of this lesson you will be able to:
 
 | Example | Folder | Objectives it drives |
 |---|---|---|
-| **ex07** | `examples/ex07-mini-ast/` | Analyze a naive AST (1), design the "Mini" AST (2), implement name-resolution + type checking (3). Plain `g++`. |
-| **ex08** | `examples/ex08-adapt-add-for/` | Adapt the Mini AST to add a `for` loop, two ways (4) -- then do it on *real* code. Plain `g++`. |
+| **ex07** | `examples/ex07-mini-ast/` | Analyze a naive AST (1), design the "Mini" AST (2), implement name-resolution + type checking (3). Plain C++17. |
+| **ex08** | `examples/ex08-adapt-add-for/` | Adapt the Mini AST to add a `for` loop, two ways (4) -- then do it on *real* code. Plain C++17. |
 
 As before, each example ships `starter/`, `solution/`,
 and a `WALKTHROUGH.md`.

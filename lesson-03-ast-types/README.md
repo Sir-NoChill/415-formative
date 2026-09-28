@@ -32,8 +32,8 @@ By the end of this lesson you will be able to:
 
 | Example | Folder | Objectives it drives |
 |---|---|---|
-| **ex05** | `examples/ex05-homo-vs-hetero/` | Define homo/hetero (1), passes as walks (3), key functionality (2), compare & contrast (4). Plain `g++`. |
-| **ex06** | `examples/ex06-antlr-frontend/` | The homogeneous parse tree in a *real* frontend -- because some students build their parser with **ANTLR** (1, 4). Java + `antlr4` + `g++`. |
+| **ex05** | `examples/ex05-homo-vs-hetero/` | Define homo/hetero (1), passes as walks (3), key functionality (2), compare & contrast (4). Plain C++17. |
+| **ex06** | `examples/ex06-antlr-frontend/` | The homogeneous parse tree in a *real* frontend -- because some students build their parser with **ANTLR** (1, 4). Java + `antlr4` + `$CXX`. |
 
 Objectives 2 and 3 are developed in this document and
 reinforced by the passes in ex05. As before, each

@@ -4,12 +4,11 @@
 a new construct. No dependencies (plain C++17).
 
 ```bash
-g++ -std=c++17 -Wall -Wextra solution/main.cpp -o ex08 && ./ex08
-g++ -std=c++17 -Wall -Wextra starter/main.cpp  -o ex08 && ./ex08   # before the task
+$CXX -std=c++17 -Wall -Wextra solution/main.cpp -o ex08 && ./ex08
+$CXX -std=c++17 -Wall -Wextra starter/main.cpp  -o ex08 && ./ex08   # before the task
 ```
 
-(Swap `g++` for `clang++` if you prefer -- both are
-verified clean under `-Wall -Wextra`.)
+(`$CXX` is your C++17 compiler.)
 
 You inherit the **Mini** AST from ex07
 (`Let/Assign/If/While/For/Print/Block` +
@@ -55,11 +54,11 @@ between them *is* the lesson.
 `solution/main.cpp` implements **both** strategies and
 runs the same loop -- `for (let i = 1; i < 6; i = i +
 1) { sum = sum + i; }` -- each way. In the starter,
-strategy A is already wired up and `desugarFor` is
-stubbed to an empty `Block`. Your job is to implement
-`desugarFor` so strategy B goes from `sum = 0` to `sum
-= 15`, matching strategy A. Do **not** touch anything
-else.
+   strategy A is already wired up and `desugarFor` is
+   stubbed to an empty `Block`. Your job is to
+   implement `desugarFor` so strategy B goes from `sum
+   = 0` to `sum = 15`, matching strategy A. Do **not**
+   touch anything else.
 
 Verified starter output (before the task):
 

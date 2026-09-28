@@ -7,7 +7,7 @@
 // count all at once. Drift is now impossible: there is only one list.
 //
 // Build & run:
-//   g++ -std=c++17 -Wall -Wextra main.cpp -o colors && ./colors
+//   $CXX -std=c++17 -Wall -Wextra main.cpp -o colors && ./colors
 // ============================================================================
 
 #include <cstdio>

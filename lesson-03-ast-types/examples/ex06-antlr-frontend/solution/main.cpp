@@ -16,7 +16,7 @@
 // the two is one token in Expr.g4 (the '%' exercise): because '%' routes to the
 // same MulDiv alternative, visitMulDiv already handles it with no code change.
 //
-// Build & run via ./run.sh (it invokes ANTLR then g++); see run.sh for flags.
+// Build & run via ./run.sh (it invokes ANTLR then $CXX); see run.sh for flags.
 //
 //===----------------------------------------------------------------------===//
 

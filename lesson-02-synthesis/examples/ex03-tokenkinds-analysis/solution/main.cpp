@@ -8,7 +8,7 @@
 // X-macro" skill: mentally substitute the macro body into every row.
 //
 // Build & run:
-//   g++ -std=c++17 -Wall -Wextra main.cpp -o lexdemo && ./lexdemo "1+2*(3-4)"
+//   $CXX -std=c++17 -Wall -Wextra main.cpp -o lexdemo && ./lexdemo "1+2*(3-4)"
 // ============================================================================
 
 #include <cstdio>

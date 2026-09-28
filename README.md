@@ -38,7 +38,7 @@ than by hand.
 Define an X-macro, understand TableGen as an "advanced
 X-macro system," and connect both to code hygiene.
 - **ex01 -- colors-xmacro:** the parallel-list bug and
-  the X-macro that kills it. Plain `g++`.
+  the X-macro that kills it. Plain C++17.
 - **ex02 -- hello-tablegen:** the same list as TableGen
   records, run through the real `llvm-tblgen`.
 
@@ -47,7 +47,7 @@ Compare the two techniques, analyze real constructs,
 and extend both yourself.
 - **ex03 -- tokenkinds-analysis:** trace a lexer token
   X-macro through four expansions, then extend it.
-  Plain `g++`.
+  Plain C++17.
 - **ex04 -- mini-dialect-tablegen:** build a real MLIR
   dialect with `mlir-tblgen`, then add an operation to
   it.
@@ -58,10 +58,10 @@ what an AST must provide, outline the passes that walk
 it, and compare the two designs.
 - **ex05 -- homo-vs-hetero:** the same program built
   both ways, with the same passes over each. Plain
-  `g++`.
+  `$CXX`.
 - **ex06 -- antlr-frontend:** the homogeneous parse
   tree in a real **ANTLR** frontend. Java + `antlr4` +
-  `g++`.
+  `$CXX`.
 
 ### [Lesson 4 -- Developing ASTs](lesson-04-ast-development/) *(analysis & application)*
 Critique an existing AST, design one from scratch,
@@ -69,10 +69,10 @@ write a semantic pass over it, and extend it with a new
 construct.
 - **ex07 -- mini-ast:** design the "Mini" AST and
   implement name-resolution + type checking. Plain
-  `g++`.
+  `$CXX`.
 - **ex08 -- adapt-add-for:** add a `for` loop two ways
   (new node vs. desugar), then on real code. Plain
-  `g++`.
+  `$CXX`.
 
 ## Objective -> example map
 
@@ -102,8 +102,8 @@ fully documented answer.
 
 ## Prerequisites & setup
 
-- A C++17 compiler (`g++` or `clang++`) -- for ex01,
-  ex03, ex05, ex07, ex08. No other dependencies.
+- A C++17 compiler in `$CXX` (defaults to `c++`) -- for
+  ex01, ex03, ex05, ex07, ex08. No other dependencies.
 - A local **LLVM/MLIR 22** build -- for ex02
   (`llvm-tblgen`) and ex04 (`mlir-tblgen` + MLIR
   libraries). CMake >= 3.20 and Ninja for ex04.
@@ -135,32 +135,32 @@ if you skip this step.
 ```bash
 # Lesson 1
 cd lesson-01-foundations/examples/ex01-colors-xmacro
-g++ -std=c++17 -Wall -Wextra starter/main.cpp -o colors && ./colors   # see the bug
-g++ -std=c++17 -Wall -Wextra solution/main.cpp -o colors && ./colors  # see the fix
+$CXX -std=c++17 -Wall -Wextra starter/main.cpp -o colors && ./colors   # see the bug
+$CXX -std=c++17 -Wall -Wextra solution/main.cpp -o colors && ./colors  # see the fix
 
 cd ../ex02-hello-tablegen
 ./run.sh solution        # runs the real llvm-tblgen
 
 # Lesson 2
 cd ../../../lesson-02-synthesis/examples/ex03-tokenkinds-analysis
-g++ -std=c++17 -Wall -Wextra solution/main.cpp -o lexdemo && ./lexdemo "1+2*(3-4)"
+$CXX -std=c++17 -Wall -Wextra solution/main.cpp -o lexdemo && ./lexdemo "1+2*(3-4)"
 
 cd ../ex04-mini-dialect-tablegen
 ./run.sh                 # configures, builds a real MLIR dialect, runs demo-opt
 
 # Lesson 3
 cd ../../../lesson-03-ast-types/examples/ex05-homo-vs-hetero
-g++ -std=c++17 -Wall -Wextra solution/main.cpp -o ex05 && ./ex05   # same tree, both ways
+$CXX -std=c++17 -Wall -Wextra solution/main.cpp -o ex05 && ./ex05   # same tree, both ways
 
 cd ../ex06-antlr-frontend
 ./run.sh                 # generates an ANTLR parser, prints the homogeneous parse tree
 
 # Lesson 4
 cd ../../../lesson-04-ast-development/examples/ex07-mini-ast
-g++ -std=c++17 -Wall -Wextra solution/main.cpp -o ex07 && ./ex07   # a semantic pass
+$CXX -std=c++17 -Wall -Wextra solution/main.cpp -o ex07 && ./ex07   # a semantic pass
 
 cd ../ex08-adapt-add-for
-g++ -std=c++17 -Wall -Wextra solution/main.cpp -o ex08 && ./ex08   # add a `for` two ways
+$CXX -std=c++17 -Wall -Wextra solution/main.cpp -o ex08 && ./ex08   # add a `for` two ways
 ```
 
 ## Repository layout
@@ -182,13 +182,13 @@ llvm-infra-lessons/
 |-- lesson-03-ast-types/
 |   |-- README.md                 # the Lesson 3 text
 |   `-- examples/
-|       |-- ex05-homo-vs-hetero/  # starter/ solution/ WALKTHROUGH.md  (plain g++)
+|       |-- ex05-homo-vs-hetero/  # starter/ solution/ WALKTHROUGH.md  (plain C++)
 |       `-- ex06-antlr-frontend/  # starter/ solution/ run.sh WALKTHROUGH.md  (ANTLR)
 `-- lesson-04-ast-development/
     |-- README.md                 # the Lesson 4 text
     `-- examples/
-        |-- ex07-mini-ast/        # starter/ solution/ WALKTHROUGH.md  (plain g++)
-        `-- ex08-adapt-add-for/   # starter/ solution/ WALKTHROUGH.md  (plain g++)
+        |-- ex07-mini-ast/        # starter/ solution/ WALKTHROUGH.md  (plain C++)
+        `-- ex08-adapt-add-for/   # starter/ solution/ WALKTHROUGH.md  (plain C++)
 ```
 
 ## Reference material used by these lessons

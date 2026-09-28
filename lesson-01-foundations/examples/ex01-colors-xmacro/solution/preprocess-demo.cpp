@@ -6,8 +6,8 @@
 // exact code an X-macro produces. It has no <cstdio> or other headers, so the
 // -E output is short and readable -- just the three generated tables.
 //
-//   g++     -E -P preprocess-demo.cpp      # stop after preprocessing, no #line noise
-//   clang++ -E -P preprocess-demo.cpp      # identical output
+//   $CXX     -E -P preprocess-demo.cpp      # stop after preprocessing, no #line noise
+//   $CXX -E -P preprocess-demo.cpp      # identical output
 //
 //   -E  = run only the preprocessor, print the result and stop.
 //   -P  = omit the "# 12 file" line markers, so the output is clean.

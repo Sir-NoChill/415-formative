@@ -5,12 +5,11 @@ the *same* passes over both. No dependencies (plain
 C++17).
 
 ```bash
-g++ -std=c++17 -Wall -Wextra solution/main.cpp -o ex05 && ./ex05
-g++ -std=c++17 -Wall -Wextra starter/main.cpp  -o ex05 && ./ex05   # before the task
+$CXX -std=c++17 -Wall -Wextra solution/main.cpp -o ex05 && ./ex05
+$CXX -std=c++17 -Wall -Wextra starter/main.cpp  -o ex05 && ./ex05   # before the task
 ```
 
-(Swap `g++` for `clang++` if you prefer -- both are
-verified clean under `-Wall -Wextra`.)
+(`$CXX` is your C++17 compiler.)
 
 One `main.cpp` builds the three assignments `x = 5; z =
 3 * (4 + 5); y = 2 * (x + 1)` in **two**
@@ -100,7 +99,7 @@ to return their argument unchanged. Everything else is
 complete. Build and run it first to see the "before":
 
 ```bash
-g++ -std=c++17 -Wall -Wextra starter/main.cpp -o ex05 && ./ex05
+$CXX -std=c++17 -Wall -Wextra starter/main.cpp -o ex05 && ./ex05
 ```
 
 Verified "before" output -- note that `z` prints

@@ -22,7 +22,7 @@
 //
 // This file implements BOTH and runs the same loop each way to show they agree.
 //
-//   g++ -std=c++17 -Wall -Wextra solution/main.cpp -o ex08 && ./ex08
+//   $CXX -std=c++17 -Wall -Wextra solution/main.cpp -o ex08 && ./ex08
 //
 //===----------------------------------------------------------------------===//
 

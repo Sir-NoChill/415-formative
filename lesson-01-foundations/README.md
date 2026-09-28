@@ -26,7 +26,7 @@ most sense:
 
 | Example | Folder | What you'll do |
 |---|---|---|
-| **ex01** | `examples/ex01-colors-xmacro/` | Turn three hand-maintained lists into one X-macro. Plain `g++`, no dependencies. |
+| **ex01** | `examples/ex01-colors-xmacro/` | Turn three hand-maintained lists into one X-macro. Plain C++17, no dependencies. |
 | **ex02** | `examples/ex02-hello-tablegen/` | Express the *same* list as TableGen records and run the real `llvm-tblgen`. |
 
 Each example has a `starter/`, a `solution/`, and a
@@ -155,11 +155,11 @@ static const unsigned ColorHex[] = {
 
 Run the preprocessor alone (`-E` = preprocess and stop;
 `-P` = drop the `# 12 "file"` line-markers). This works
-identically with `g++` or `clang++`:
+identically with any C++ compiler:
 
 ```console
 $ cd examples/ex01-colors-xmacro/solution
-$ g++ -E -P preprocess-demo.cpp
+$ $CXX -E -P preprocess-demo.cpp
 ```
 
 and this is the **actual, verbatim** output -- the code

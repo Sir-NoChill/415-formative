@@ -27,7 +27,7 @@ By the end of this lesson you will be able to:
 
 | Example | Folder | Objectives it drives |
 |---|---|---|
-| **ex03** | `examples/ex03-tokenkinds-analysis/` | Analyze an X-macro (2), adapt an X-macro (4). Plain `g++`. |
+| **ex03** | `examples/ex03-tokenkinds-analysis/` | Analyze an X-macro (2), adapt an X-macro (4). Plain C++17. |
 | **ex04** | `examples/ex04-mini-dialect-tablegen/` | Analyze a TableGen construct (3), adapt TableGen tools (5). Real MLIR + `mlir-tblgen`. |
 
 Objective 1 (compare & contrast) is developed in this

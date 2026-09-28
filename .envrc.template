@@ -14,3 +14,6 @@ export MLIR_DIR="$LLVM_DIR/lib/cmake/mlir"
 
 # Convenience: put the LLVM tools (llvm-tblgen, mlir-tblgen) on PATH.
 export PATH="$LLVM_DIR/bin:$PATH"
+
+# C++ compiler used by the plain-g++ examples and hooks.
+export CXX="${CXX:-c++}"

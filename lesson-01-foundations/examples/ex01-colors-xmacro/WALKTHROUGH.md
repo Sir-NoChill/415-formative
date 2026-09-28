@@ -29,7 +29,7 @@ added `Cyan` to the enum and forgot the two switches.
 Build and run it:
 
 ```bash
-g++ -std=c++17 -Wall -Wextra starter/main.cpp -o colors && ./colors
+$CXX -std=c++17 -Wall -Wextra starter/main.cpp -o colors && ./colors
 ```
 
 You get (verified):
@@ -103,7 +103,7 @@ produce both identifiers (for the enum) and strings
 Build and run the solution:
 
 ```bash
-g++ -std=c++17 -Wall -Wextra solution/main.cpp -o colors && ./colors
+$CXX -std=c++17 -Wall -Wextra solution/main.cpp -o colors && ./colors
 ```
 
 Verified output -- `Cyan` is now correct everywhere:

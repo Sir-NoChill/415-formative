@@ -4,12 +4,11 @@
 then walk it. No dependencies (plain C++17).
 
 ```bash
-g++ -std=c++17 -Wall -Wextra solution/main.cpp -o ex07 && ./ex07
-g++ -std=c++17 -Wall -Wextra starter/main.cpp  -o ex07 && ./ex07   # before the task
+$CXX -std=c++17 -Wall -Wextra solution/main.cpp -o ex07 && ./ex07
+$CXX -std=c++17 -Wall -Wextra starter/main.cpp  -o ex07 && ./ex07   # before the task
 ```
 
-(Swap `g++` for `clang++` if you prefer -- both are
-verified clean under `-Wall -Wextra`.)
+(`$CXX` is your C++17 compiler.)
 
 A well-designed AST for **Mini** -- a tiny imperative
 language (`let`/assign/`if`/`while`/`print`, over
