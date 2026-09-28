@@ -18,7 +18,7 @@ extra_css:
 theme:
   name: material
   logo: assets/ua-logo-white.svg
-  favicon: assets/ua-logo-green.svg
+  favicon: assets/ua-shield-green.svg
   font:
     text: Roboto
     code: Roboto Mono
