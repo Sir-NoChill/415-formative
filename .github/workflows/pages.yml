@@ -26,8 +26,9 @@ jobs:
       - name: Install MkDocs Material
         run: pip install "mkdocs-material==9.*"
       - name: Build site
-        # site_dir is out-of-tree because docs_dir is the repo root ('.').
-        run: mkdocs build --site-dir "$RUNNER_TEMP/site"
+        # Stages the lesson tree into _docs/ (docs_dir cannot be the repo root)
+        # and builds to an out-of-tree site dir.
+        run: bash scripts/build-docs.sh --site-dir "$RUNNER_TEMP/site"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ${{ runner.temp }}/site
