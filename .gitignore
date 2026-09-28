@@ -11,6 +11,11 @@ build/
 colors
 lexdemo
 a.out
+ex05
+ex07
+ex08
+exprdemo
+gen/
 
 # Editor / OS noise.
 .cache/
