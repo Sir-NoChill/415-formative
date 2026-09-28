@@ -1,4 +1,10 @@
-# The example C++ is written in LLVM's own style, to match the real code the
-# lessons reference (Clang, MLIR, ParserByHand, gazc).
+# The example C++ is written in LLVM's style, to match the real code the lessons
+# reference (Clang, MLIR, ParserByHand, gazc). The column limit is narrowed to 55.
+# Comment reflow is disabled so the deliberately-formatted teaching comments (with
+# aligned notes and code sketches) keep their layout; only code is wrapped to 55.
+# Constructs that still read worse when trimmed are guarded in-source with
+# `// clang-format off` / `// clang-format on`.
 BasedOnStyle: LLVM
+ColumnLimit: 55
+ReflowComments: false
 Standard: c++17

@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # pre-commit hook: keep the repository from breaking.
-#   1. clang-format check on staged C++ (LLVM style, from .clang-format)
+#   1. clang-format check on staged C++ (LLVM style, 55-col, from .clang-format)
 #   2. shellcheck on staged shell scripts
 #   3. a -Werror build smoke test of the self-contained g++ examples when their
 #      sources are staged (ex05, ex07, ex08; ex06 needs ANTLR/Java and is left to
 #      manual `run.sh`)
+#   4. Markdown prose width check (<=55 cols) on staged .md
 # Missing optional tools degrade to a warning rather than blocking.
 set -euo pipefail
 
@@ -58,6 +59,16 @@ if echo "$staged" | grep -qE 'ex0[578].*\.(cpp|def)$'; then
       fi
     done
   done
+fi
+
+# 4. markdown width ------------------------------------------------------------
+md="$(echo "$staged" | grep -E '\.md$' || true)"
+if [ -n "$md" ] && command -v python3 >/dev/null 2>&1; then
+  # shellcheck disable=SC2086
+  if ! python3 "$root/scripts/check-md-width.py" $md; then
+    echo "pre-commit: wrap Markdown prose to <=55 cols (scripts/wrap-md.py)." >&2
+    exit 1
+  fi
 fi
 
 exit 0
