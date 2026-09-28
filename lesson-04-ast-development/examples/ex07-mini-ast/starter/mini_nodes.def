@@ -1,0 +1,48 @@
+//===- mini_nodes.def - The Mini AST node-kind table (an X-macro) ----------===//
+//
+// This is the Lesson 1 idiom, put to work on an AST. It is the single source of
+// truth for every concrete node kind. main.cpp #includes it three times to
+// generate, from this one list:
+//   * the `Kind` enum,
+//   * the category-range predicate `isExprKind()`, and
+//   * a `kindName()` debug string (via stringize `#NAME`).
+// Add or reorder a row and all three regenerate together -- they can never drift.
+//
+// In ParserByHand the equivalent table is `ASTNodes.def`; in gazc it is TableGen
+// (`gazc/include/AST/ASTNodes.td`, expanded by the custom `gazprea-tblgen`). The
+// downstream expansion is identical; here we hand-write the table so the whole
+// mechanism fits in one readable example.
+//
+//   MINI_NODE(NAME)                - one concrete node kind.
+//   MINI_NODE_RANGE(BASE, LO, HI)  - kinds LO..HI (inclusive) form category BASE;
+//                                    used for an O(1) range-check RTTI predicate.
+//                                    Requires the category's members to be listed
+//                                    contiguously.
+//
+//===----------------------------------------------------------------------===//
+
+#ifndef MINI_NODE
+#define MINI_NODE(NAME)
+#endif
+#ifndef MINI_NODE_RANGE
+#define MINI_NODE_RANGE(BASE, FIRST, LAST)
+#endif
+
+// Statements.
+MINI_NODE(Let)
+MINI_NODE(Assign)
+MINI_NODE(If)
+MINI_NODE(While)
+MINI_NODE(Print)
+MINI_NODE(Block)
+
+// Expressions -- kept contiguous and last, so isExprKind() is a range check.
+MINI_NODE(IntLit)
+MINI_NODE(BoolLit)
+MINI_NODE(VarRef)
+MINI_NODE(Binary)
+
+MINI_NODE_RANGE(Expr, IntLit, Binary)
+
+#undef MINI_NODE
+#undef MINI_NODE_RANGE
