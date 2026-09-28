@@ -32,6 +32,30 @@ than by hand.
 > use; no template metaprogramming background is
 > assumed.
 
+## Requirements
+
+The CMPUT 415 lab machines already have everything
+below; to work on your own machine, follow the CMPUT
+415 setup documentation for the course toolchain.
+
+- **A C++17 compiler** in `$CXX` (defaults to `c++`) --
+  for ex01, ex03, ex05, ex07, ex08; nothing else.
+- **LLVM/MLIR 22** (`llvm-tblgen`, `mlir-tblgen`, the
+  MLIR libraries; CMake >= 3.20 and Ninja) -- for ex02
+  and ex04.
+- **ANTLR 4** (a JVM, the tool jar, the C++ runtime) --
+  for ex06.
+- **Python 3 + Material for MkDocs** -- only to build
+  the documentation site locally
+  (`scripts/build-docs.sh`).
+- **git** with the repository hooks enabled (`git
+  config core.hooksPath .githooks`) to contribute.
+
+> **Roadmap.** This pack may eventually be ported to
+> Sphinx and folded into the Gazprea documentation (the
+> `spec` repo) so students reach everything from one
+> site; for now it stands on its own.
+
 ## The four lessons
 
 ### [Lesson 1 -- Foundations](lesson-01-foundations/) *(knowledge & comprehension)*
